@@ -1,0 +1,280 @@
+.about-section {
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    padding: 4rem 4rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.about-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Compact Header */
+.about-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 3rem 0;
+    text-align: center;
+}
+
+/* Compact Grid Layout */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+/* Left: Text Content */
+.about-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.intro-text {
+    font-size: 1.6rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin: 0;
+}
+
+.intro-text .highlight {
+    color: var(--text-primary);
+    font-style: italic;
+    font-weight: 400;
+}
+
+.description-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Compact Stats */
+.stats-compact {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Interactive Terminal */
+.terminal-container {
+    background: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: fit-content;
+    max-height: 450px;
+}
+
+.terminal-header {
+    background: #2d2d2d;
+    padding: 0.5rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.terminal-btn {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.terminal-btn.red {
+    background: #ff5f56;
+}
+
+.terminal-btn.yellow {
+    background: #ffbd2e;
+}
+
+.terminal-btn.green {
+    background: #27c93f;
+}
+
+.terminal-title {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.terminal-body {
+    padding: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    line-height: 1.5;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.terminal-line {
+    margin-bottom: 0.6rem;
+    animation: terminalFadeIn 0.2s ease-out;
+}
+
+@keyframes terminalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.terminal-command {
+    color: #4ade80;
+    margin-bottom: 0.15rem;
+}
+
+.prompt {
+    color: #818cf8;
+    margin-right: 0.3rem;
+}
+
+.terminal-output {
+    color: rgba(255, 255, 255, 0.75);
+    padding-left: 1rem;
+    font-size: 0.65rem;
+}
+
+.terminal-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 12px;
+    background: #4ade80;
+    animation: blink 1s infinite;
+    margin-left: 0.15rem;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Interactive Input */
+.terminal-input-form {
+    margin-top: 0.5rem;
+}
+
+.terminal-input-line {
+    display: flex;
+    align-items: center;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #4ade80;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    outline: none;
+    padding: 0;
+}
+
+.terminal-input::placeholder {
+    color: rgba(74, 222, 128, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .terminal-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .about-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .intro-text {
+        font-size: 1.2rem;
+    }
+
+    .description-text {
+        font-size: 0.9rem;
+    }
+
+    .stats-compact {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .stat {
+        flex: 1;
+        min-width: 80px;
+    }
+
+    .stat-num {
+        font-size: 1.5rem;
+    }
+
+    .terminal-body {
+        padding: 0.6rem;
+        font-size: 0.65rem;
+        max-height: 300px;
+    }
+}

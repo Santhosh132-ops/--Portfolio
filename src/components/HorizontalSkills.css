@@ -1,0 +1,66 @@
+/* HorizontalSkills.css – stronger fadeout, no borders */
+
+.skills-marquee {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-color);
+    padding: 0.5rem 0;
+}
+
+/* Wider fadeout overlays on left and right edges */
+.skills-marquee::before,
+.skills-marquee::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 12rem;
+    /* stronger fade */
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.skills-marquee::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-color), transparent);
+}
+
+.skills-marquee::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-color), transparent);
+}
+
+.marquee-content {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll 20s linear infinite;
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+
+.skill-item {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 1.5rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+}
+
+.skill-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.4rem;
+    object-fit: contain;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
