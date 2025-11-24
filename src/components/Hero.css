@@ -16,6 +16,8 @@ body {
     margin: 0;
     padding: 0;
     overflow-y: auto;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll globally */
 }
 
 .page-wrapper {
@@ -372,13 +374,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    body {
-        overflow: hidden;
-        /* Prevent scrolling on mobile */
-        position: fixed;
-        width: 100%;
-        height: 100%;
-    }
+    /* Removed body { overflow: hidden } to allow vertical scrolling */
 
     .hero {
         height: 100vh;
@@ -389,7 +385,7 @@ body {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        /* Ensure no internal scroll */
+        /* Ensure no internal scroll within hero, but allow page scroll */
     }
 
     .headline-row {
