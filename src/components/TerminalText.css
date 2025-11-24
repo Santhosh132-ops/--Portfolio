@@ -1,0 +1,4 @@
+.terminal-typing {
+    display: inline-block;
+    font-family: var(--font-mono);
+}
