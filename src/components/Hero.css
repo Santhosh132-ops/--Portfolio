@@ -372,13 +372,10 @@ body {
 }
 
 @media (max-width: 768px) {
-    body {
-        overflow-y: auto;
-    }
-
     .hero {
         height: 100vh;
-        padding: 100px 1.5rem 1rem 1.5rem;
+        padding: 140px 1.5rem 1rem 1.5rem;
+        /* Increased top padding */
         display: flex;
         flex-direction: column;
     }
@@ -390,7 +387,7 @@ body {
 
     .headline-row.bottom {
         flex-direction: column-reverse;
-        margin-top: 0.5rem;
+        margin-top: 1rem;
     }
 
     .headline-left,
@@ -401,8 +398,8 @@ body {
     }
 
     .hero-cta-group {
-        margin-top: 1rem;
-        margin-bottom: 0.5rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
     }
 
     .hero-description-block {
