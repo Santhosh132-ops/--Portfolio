@@ -39,7 +39,7 @@ main {
 
 /* Smooth scroll for anchor links only */
 html {
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
   overflow-x: hidden;
   overflow-anchor: none;
 }
