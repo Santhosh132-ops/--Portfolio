@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import './SkillBadges.css';
 import mongo1 from '../assets/mongo1.png';
 import mongo2 from '../assets/mongo2.png';
+import mongo3 from '../assets/mongo3.png';
+import mongo4 from '../assets/mongo4.png';
+import mongo5 from '../assets/mongo5.png';
+import ciscologo from '../assets/cisco.png';
+import cisco1 from '../assets/cisco-basics.png';
 
 // Data Structure
 const skillBadgesData = [
@@ -43,14 +48,14 @@ const skillBadgesData = [
     {
         id: 'cisco',
         name: 'Cisco',
-        logo: 'https://img.icons8.com/color/144/cisco.png',
+        logo: ciscologo,
         badges: [
             {
                 id: 'cisco-netacad',
-                name: 'Networking Basics',
-                image: 'https://images.credly.com/size/340x340/images/2d852504-2068-4504-9721-3b70826955a5/Networking_Basics_Badge.png', // Placeholder
-                skills: ['Networking', 'IP Addressing', 'Routers'],
-                link: '#'
+                name: 'Operating Systems Basics',
+                image: cisco1, // Placeholder
+                skills: ['Linux', 'Operating System Security', 'Windows','Android','IOS'],
+                link: 'https://www.credly.com/badges/9ac41825-8f11-441e-93f5-4b41948b39e4/public_url'
             }
         ]
     },
@@ -72,7 +77,31 @@ const skillBadgesData = [
                 image: mongo2, // Placeholder
                 skills: ['Database Queries', 'Query Optimization', 'CRUD'],
                 link: 'https://www.credly.com/badges/8792e032-a78b-46f4-833c-3fd460ab475d/public_url'
+            },
+             {
+                id: 'mongodb-rag',
+                name: 'Building RAG Apps Using MongoDB',
+                image: mongo3, // Placeholder
+                skills: ['GenAI', 'RAG'],
+                link: 'https://www.credly.com/badges/7f5cdef8-0ed2-4d6e-9b71-e0854b72f024/public_url'
+            },
+             {
+                id: 'mongodb-sharding',
+                name: 'MongoDB Sharding Strategies',
+                image: mongo4, // Placeholder
+                skills: ['Data Managements', 'Sharding','Scalability'],
+                link: 'https://www.credly.com/badges/4d65513c-7961-44dd-a705-3408aa66a177/public_url'
+            },
+            {
+                id: 'mongodb-agents',
+                name: 'Building AI Agents with MongoDB',
+                image: mongo5, // Placeholder
+                skills: ['AutoAI', 'Decision Analysis','AI Agents'],
+                link: 'https://www.credly.com/badges/aa94db62-765f-4c6c-acaa-9950f1239158/public_url'
             }
+
+
+
 
         ]
     },
