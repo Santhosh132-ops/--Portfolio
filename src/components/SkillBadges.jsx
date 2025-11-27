@@ -188,13 +188,18 @@ const SkillBadges = () => {
                 </div>
             </div>
 
-            {/* Issuer Modal */}
-            {selectedIssuer && (
+            {/* Issuer Modal - Portaled to body */}
+            {selectedIssuer && createPortal(
                 <div className="badge-modal-overlay" onClick={closeIssuerModal}>
                     <div className="badge-modal-content" onClick={e => e.stopPropagation()}>
-                        <button className="modal-close-btn" onClick={closeIssuerModal}>×</button>
 
                         <div className="modal-header">
+                            <button className="modal-back-btn" onClick={closeIssuerModal} aria-label="Back">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                            </button>
                             <img src={selectedIssuer.logo} alt={selectedIssuer.name} className="modal-issuer-logo" />
                             <div>
                                 <h3 className="modal-title">{selectedIssuer.name} Badges</h3>
@@ -223,7 +228,12 @@ const SkillBadges = () => {
                             {/* Badge Details Panel (Visible when a badge is selected) */}
                             {selectedBadge && (
                                 <div className="badge-detail-panel">
-                                    <button className="detail-close-btn" onClick={closeBadgeDetail}>← Back</button>
+                                    <button className="detail-close-btn" onClick={closeBadgeDetail} aria-label="Back">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                                            <polyline points="12 19 5 12 12 5"></polyline>
+                                        </svg>
+                                    </button>
                                     <div className="detail-content">
                                         <div className="detail-image-wrapper">
                                             <img src={selectedBadge.image || selectedIssuer.logo} alt={selectedBadge.name} />
@@ -268,7 +278,8 @@ const SkillBadges = () => {
                             )}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* Certificate Preview Modal - Portaled to body */}
