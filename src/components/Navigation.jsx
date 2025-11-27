@@ -4,6 +4,7 @@ import './Navigation.css';
 const Navigation = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [activeSection, setActiveSection] = useState('home');
 
     useEffect(() => {
         const handleScroll = () => {
@@ -18,6 +19,35 @@ const Navigation = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    useEffect(() => {
+        const sections = ['home', 'about', 'projects', 'achievements', 'badges', 'contacts'];
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3 // Trigger when 30% of the section is visible
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) observer.observe(element);
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    const allSections = ['home', 'about', 'projects', 'achievements', 'badges', 'contacts'];
+    const visibleSections = allSections.filter(section => section !== activeSection);
+
+    const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
     return (
         <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
             <div className="nav-brand">
@@ -26,10 +56,11 @@ const Navigation = () => {
 
             {/* Desktop Links */}
             <div className="nav-links">
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="#articles">Articles</a>
-                <a href="#contacts">Contacts</a>
+                {visibleSections.map(section => (
+                    <a key={section} href={`#${section}`}>
+                        {capitalize(section)}
+                    </a>
+                ))}
             </div>
 
             {/* Mobile Menu Button */}
@@ -50,10 +81,11 @@ const Navigation = () => {
             {/* Mobile Menu Overlay */}
             <div className={`mobile-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`}>
                 <div className="mobile-nav-links">
-                    <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a>
-                    <a href="#projects" onClick={() => setIsMobileMenuOpen(false)}>Projects</a>
-                    <a href="#articles" onClick={() => setIsMobileMenuOpen(false)}>Articles</a>
-                    <a href="#contacts" onClick={() => setIsMobileMenuOpen(false)}>Contacts</a>
+                    {visibleSections.map(section => (
+                        <a key={section} href={`#${section}`} onClick={() => setIsMobileMenuOpen(false)}>
+                            {capitalize(section)}
+                        </a>
+                    ))}
                 </div>
             </div>
         </nav>
