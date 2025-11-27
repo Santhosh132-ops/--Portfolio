@@ -1,3 +1,6 @@
+/* Import Button Animations */
+@import './components/ButtonAnimations.css';
+
 /* Global Smooth Scrolling */
 * {
   scroll-behavior: smooth;

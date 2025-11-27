@@ -1,0 +1,263 @@
+/* Global Button Animations and Effects */
+
+/* Universal outline and tap highlight removal */
+*,
+*:focus,
+*:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove all default outlines and highlights */
+button,
+a,
+input,
+textarea,
+select {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+}
+
+button:focus,
+button:active,
+a:focus,
+a:active {
+    outline: none !important;
+    outline-width: 0 !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Button base styles with animations */
+button,
+a.cta-pill,
+a.cta-icon-btn,
+.cta-arrow,
+.read-more-pill,
+.nav-btn,
+.explore-btn,
+.view-all-link {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+}
+
+/* Ripple effect on click */
+button::before,
+a.cta-pill::before,
+.read-more-pill::before,
+.explore-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 70%);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease-out, height 0.6s ease-out, opacity 0.6s ease-out;
+    opacity: 0;
+    pointer-events: none;
+}
+
+button:active::before,
+a.cta-pill:active::before,
+.read-more-pill:active::before,
+.explore-btn:active::before {
+    width: 400px;
+    height: 400px;
+    opacity: 1;
+    transition: width 0.3s ease-out, height 0.3s ease-out, opacity 0s;
+}
+
+/* Smooth hover lift with shadow */
+button:hover,
+a.cta-pill:hover,
+.read-more-pill:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    filter: brightness(1.1);
+}
+
+/* Active press down */
+button:active,
+a.cta-pill:active,
+.read-more-pill:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.1s ease;
+}
+
+/* Icon button magnetic effect */
+.cta-icon-btn,
+.cta-arrow {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cta-icon-btn:hover,
+.cta-arrow:hover {
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.cta-icon-btn:active,
+.cta-arrow:active {
+    transform: scale(0.9) rotate(-5deg);
+    transition: all 0.1s ease;
+}
+
+/* Navigation button pulse and glow */
+.nav-btn {
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    animation: navPulse 1.5s infinite;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes navPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+    }
+}
+
+/* Explore button shimmer effect */
+.explore-btn {
+    overflow: hidden;
+}
+
+.explore-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 70%);
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    transition: transform 0.6s ease;
+}
+
+.explore-btn:hover::after {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+}
+
+.explore-btn:hover {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.6),
+        0 10px 25px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px) scale(1.05);
+}
+
+/* View all link smooth underline */
+.view-all-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.view-all-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, currentColor 0%, transparent 100%);
+    transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.view-all-link:hover::after {
+    width: 100%;
+}
+
+.view-all-link:hover {
+    transform: translateX(3px);
+    color: #fff;
+}
+
+/* Floating animation for CTA buttons */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.cta-pill:hover {
+    animation: float 2s ease-in-out infinite;
+}
+
+/* Glow pulse for primary buttons */
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+    }
+}
+
+button:hover,
+.read-more-pill:hover {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Mobile touch feedback */
+@media (hover: none) and (pointer: coarse) {
+
+    button:active,
+    a:active {
+        transform: scale(0.95);
+        opacity: 0.85;
+        transition: all 0.1s ease;
+    }
+
+    /* Disable hover animations on mobile */
+    button:hover,
+    a:hover {
+        animation: none;
+        transform: none;
+    }
+}
+
+/* Smooth transitions for all states */
+button,
+a.cta-pill,
+.read-more-pill,
+.explore-btn {
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Disabled state */
+button:disabled,
+a.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    filter: grayscale(1);
+}
