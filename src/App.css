@@ -1,8 +1,59 @@
+/* Global Smooth Scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
 .app {
   min-height: 100vh;
   background-color: var(--bg-primary);
+  overflow-x: hidden;
 }
 
 main {
   position: relative;
+  overflow-x: hidden;
+}
+
+/* Enhanced Scroll Reveal Animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(60px) scale(0.98);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Prevent layout shift during animation */
+.scroll-reveal>* {
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

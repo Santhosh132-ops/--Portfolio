@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Hero.css';
+import './HeroFix.css';
 
 const Hero = () => {
     const [mounted, setMounted] = useState(false);

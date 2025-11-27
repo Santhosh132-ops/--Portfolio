@@ -32,8 +32,12 @@ const Projects = () => {
                 </div>
 
                 <div className="projects-grid">
-                    {projects.map((project) => (
-                        <a href={project.link} key={project.id} className="project-card">
+                    {projects.map((project, index) => (
+                        <div
+                            key={project.id}
+                            className="project-card"
+                            style={{ '--card-index': index }}
+                        >
                             <div className="project-image-wrapper">
                                 <img
                                     src={project.image}
@@ -47,9 +51,13 @@ const Projects = () => {
                                             <span key={i} className="project-tag">{tag}</span>
                                         ))}
                                     </div>
-                                    <div className="explore-btn">
+                                    <a
+                                        href={project.link}
+                                        className="explore-btn"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
                                         Explore <span className="arrow">↗</span>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                             <div className="project-content">
@@ -58,7 +66,7 @@ const Projects = () => {
                                 </div>
                                 <p className="project-description">{project.description}</p>
                             </div>
-                        </a>
+                        </div>
                     ))}
                 </div>
             </div>
