@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './About.css';
 
 const About = () => {
@@ -8,6 +8,8 @@ const About = () => {
     const [isTyping, setIsTyping] = useState(false);
     const [userInput, setUserInput] = useState('');
     const [isInteractive, setIsInteractive] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const sectionRef = useRef(null);
 
     const skills = {
         backend: ['Node.js', 'Express', 'MongoDB', 'PostgreSQL', 'Redis', 'GraphQL'],
@@ -25,8 +27,28 @@ const About = () => {
         { command: '$ echo $PASSION', output: 'Building scalable systems ⚡' }
     ];
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.3 }
+        );
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
     // Typing effect for initial commands
     useEffect(() => {
+        if (!isVisible) return;
+
         if (currentLineIndex >= terminalCommands.length) {
             setIsInteractive(true);
             return;
@@ -48,7 +70,7 @@ const About = () => {
             }, 300);
             return () => clearTimeout(timer);
         }
-    }, [currentText, currentLineIndex]);
+    }, [currentText, currentLineIndex, isVisible]);
 
     const handleCommand = (e) => {
         e.preventDefault();
@@ -79,7 +101,7 @@ const About = () => {
     };
 
     return (
-        <section className="about-section" id="about">
+        <section className="about-section" id="about" ref={sectionRef}>
             <div className="about-container">
                 {/* Header */}
                 <div className="about-header">
@@ -140,7 +162,6 @@ const About = () => {
                                             onChange={e => setUserInput(e.target.value)}
                                             className="terminal-input"
                                             placeholder="Type 'help' for commands..."
-                                            autoFocus
                                         />
                                     </div>
                                 </form>

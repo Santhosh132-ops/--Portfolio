@@ -315,3 +315,23 @@
         border-radius: 16px;
     }
 }
+
+/* Override button animations for explore button */
+.project-card .explore-btn {
+    pointer-events: none !important;
+    opacity: 0 !important;
+    transform: translate(-50%, -50%) scale(0.8) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    display: flex !important;
+}
+
+.project-card:hover .explore-btn {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+.project-card .explore-btn:hover {
+    background: #fff !important;
+    transform: translate(-50%, -50%) scale(1.05) !important;
+}
