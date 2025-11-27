@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import './SkillBadges.css';
 import mongo1 from '../assets/mongo1.png';
 import mongo2 from '../assets/mongo2.png';
@@ -7,6 +8,9 @@ import mongo4 from '../assets/mongo4.png';
 import mongo5 from '../assets/mongo5.png';
 import ciscologo from '../assets/cisco.png';
 import cisco1 from '../assets/cisco-basics.png';
+import google1 from '../assets/google1.png';
+import aws1 from '../assets/aws1.jpg';
+import aws2 from '../assets/aws2.jpg';
 
 // Data Structure
 const skillBadgesData = [
@@ -16,18 +20,20 @@ const skillBadgesData = [
         logo: 'https://img.icons8.com/color/144/amazon-web-services.png',
         badges: [
             {
-                id: 'aws-cloud-quest',
-                name: 'AWS Cloud Quest: Cloud Practitioner',
-                image: 'https://d1.awsstatic.com/training-and-certification/certification-badges/AWS-Certified-Cloud-Practitioner_badge.634f8a21af2e0e956ed8905a72366146ba22b74c.png', // Placeholder
-                skills: ['Cloud Computing', 'AWS Services', 'Security', 'Architecture'],
-                link: '#'
+                id: 'aws-cloud',
+                name: 'Managing Applications at Scale with Amazon ECS',
+                image: aws2, // Placeholder
+                skills: ['Cloud Computing', 'AWS ECS', 'AWS Auto Scaling', 'Architecture'],
+                link: '#',
+                certificate: aws2
             },
             {
                 id: 'aws-educate',
-                name: 'AWS Educate Introduction to Cloud 101',
-                image: 'https://d1.awsstatic.com/training-and-certification/certification-badges/AWS-Certified-Cloud-Practitioner_badge.634f8a21af2e0e956ed8905a72366146ba22b74c.png', // Placeholder
-                skills: ['Cloud Basics', 'Compute', 'Storage', 'Networking'],
-                link: '#'
+                name: 'Getting started with DevOps on AWS',
+                image: aws1, // Placeholder
+                skills: ['AWS CodePipeline', 'AWS CodeDeploy', 'AWS CodeBuild', 'AWS CodeCommit'],
+                link: '#',
+                certificate: aws1
             }
         ]
     },
@@ -38,10 +44,10 @@ const skillBadgesData = [
         badges: [
             {
                 id: 'google-cloud-essentials',
-                name: 'Google Cloud Essentials',
-                image: 'https://cdn.qwiklabs.com/badge-images/google-cloud-essentials.png', // Placeholder
-                skills: ['GCP', 'Compute Engine', 'Cloud Shell'],
-                link: '#'
+                name: 'Develop Serverless Applications on Cloud Run',
+                image: google1, // Placeholder
+                skills: ['Cloud Build', 'Cloud Run', 'Containers', 'Firestore', 'Serverless'],
+                link: 'https://www.credly.com/badges/0fc9f34b-b8ca-4f1e-8ad4-093f4ce41985/public_url'
             }
         ]
     },
@@ -54,7 +60,7 @@ const skillBadgesData = [
                 id: 'cisco-netacad',
                 name: 'Operating Systems Basics',
                 image: cisco1, // Placeholder
-                skills: ['Linux', 'Operating System Security', 'Windows','Android','IOS'],
+                skills: ['Linux', 'Operating System Security', 'Windows', 'Android', 'IOS'],
                 link: 'https://www.credly.com/badges/9ac41825-8f11-441e-93f5-4b41948b39e4/public_url'
             }
         ]
@@ -71,38 +77,34 @@ const skillBadgesData = [
                 skills: ['Database Schemas', 'Database Architecture', 'Data Validation'],
                 link: 'https://www.credly.com/badges/363e5ddd-97e3-450f-873e-72d9d574bffd/public_url'
             },
-             {
+            {
                 id: 'mongodb-operations',
                 name: 'CRUD Operations in MongoDB',
                 image: mongo2, // Placeholder
                 skills: ['Database Queries', 'Query Optimization', 'CRUD'],
                 link: 'https://www.credly.com/badges/8792e032-a78b-46f4-833c-3fd460ab475d/public_url'
             },
-             {
+            {
                 id: 'mongodb-rag',
                 name: 'Building RAG Apps Using MongoDB',
                 image: mongo3, // Placeholder
                 skills: ['GenAI', 'RAG'],
                 link: 'https://www.credly.com/badges/7f5cdef8-0ed2-4d6e-9b71-e0854b72f024/public_url'
             },
-             {
+            {
                 id: 'mongodb-sharding',
                 name: 'MongoDB Sharding Strategies',
                 image: mongo4, // Placeholder
-                skills: ['Data Managements', 'Sharding','Scalability'],
+                skills: ['Data Managements', 'Sharding', 'Scalability'],
                 link: 'https://www.credly.com/badges/4d65513c-7961-44dd-a705-3408aa66a177/public_url'
             },
             {
                 id: 'mongodb-agents',
                 name: 'Building AI Agents with MongoDB',
                 image: mongo5, // Placeholder
-                skills: ['AutoAI', 'Decision Analysis','AI Agents'],
+                skills: ['AutoAI', 'Decision Analysis', 'AI Agents'],
                 link: 'https://www.credly.com/badges/aa94db62-765f-4c6c-acaa-9950f1239158/public_url'
             }
-
-
-
-
         ]
     },
     {
@@ -115,7 +117,7 @@ const skillBadgesData = [
                 name: 'Postman Student Expert',
                 image: 'https://voyager.postman.com/logo/postman-logo-icon-orange.svg', // Placeholder
                 skills: ['API Testing', 'Automation', 'Documentation'],
-                link: '#'
+                link: 'https://badges.parchment.com/public/assertions/284TEG-LTgKiS_YPqItBIg?identity__email=sr7107%40srmist.edu.in'
             }
         ]
     }
@@ -124,6 +126,7 @@ const skillBadgesData = [
 const SkillBadges = () => {
     const [selectedIssuer, setSelectedIssuer] = useState(null);
     const [selectedBadge, setSelectedBadge] = useState(null);
+    const [previewCert, setPreviewCert] = useState(null);
 
     const handleIssuerClick = (issuer) => {
         setSelectedIssuer(issuer);
@@ -236,20 +239,47 @@ const SkillBadges = () => {
                                             </div>
                                         </div>
 
-                                        <a href={selectedBadge.link} target="_blank" rel="noopener noreferrer" className="detail-verify-btn">
-                                            Verify Badge
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                                <polyline points="15 3 21 3 21 9" />
-                                                <line x1="10" y1="14" x2="21" y2="3" />
-                                            </svg>
-                                        </a>
+                                        {selectedBadge.certificate ? (
+                                            <button
+                                                className="detail-verify-btn"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setPreviewCert(selectedBadge.certificate);
+                                                }}
+                                            >
+                                                Preview Certificate
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                            </button>
+                                        ) : (
+                                            <a href={selectedBadge.link} target="_blank" rel="noopener noreferrer" className="detail-verify-btn">
+                                                Verify Badge
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                    <polyline points="15 3 21 3 21 9" />
+                                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                                </svg>
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
                             )}
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Certificate Preview Modal - Portaled to body */}
+            {previewCert && createPortal(
+                <div className="cert-preview-overlay" onClick={() => setPreviewCert(null)}>
+                    <div className="cert-preview-content" onClick={e => e.stopPropagation()}>
+                        <button className="cert-preview-close" onClick={() => setPreviewCert(null)}>×</button>
+                        <img src={previewCert} alt="Certificate Preview" />
+                    </div>
+                </div>,
+                document.body
             )}
         </section>
     );

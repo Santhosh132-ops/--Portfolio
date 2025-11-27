@@ -20,7 +20,7 @@ const Navigation = () => {
     }, []);
 
     useEffect(() => {
-        const sections = ['home', 'about', 'projects', 'achievements', 'badges', 'contacts'];
+        const sections = ['home', 'about', 'projects', 'achievements', 'badges', 'contact'];
         const observerOptions = {
             root: null,
             rootMargin: '0px',
@@ -43,7 +43,7 @@ const Navigation = () => {
         return () => observer.disconnect();
     }, []);
 
-    const allSections = ['home', 'about', 'projects', 'achievements', 'badges', 'contacts'];
+    const allSections = ['home', 'about', 'projects', 'achievements', 'badges', 'contact'];
     const visibleSections = allSections.filter(section => section !== activeSection);
 
     const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -93,4 +93,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-
