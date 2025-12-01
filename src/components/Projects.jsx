@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Projects.css';
 
 const projects = [
@@ -51,13 +52,13 @@ const Projects = () => {
                                             <span key={i} className="project-tag">{tag}</span>
                                         ))}
                                     </div>
-                                    <a
-                                        href={project.link}
+                                    <Link
+                                        to={`/project/${project.id}`}
                                         className="explore-btn"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         Explore <span className="arrow">↗</span>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="project-content">

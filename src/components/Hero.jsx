@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Hero.css';
 import './HeroFix.css';
 
 const Hero = () => {
+    const navigate = useNavigate();
     const [mounted, setMounted] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(1); // Start with the middle article
 
@@ -14,27 +16,32 @@ const Hero = () => {
         {
             title: "Microservices with Docker & K8s",
             description: "A comprehensive guide to containerizing applications and orchestrating them with Kubernetes.",
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
+            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+            slug: "microservices-docker-k8s"
         },
         {
             title: "The simplest example is kafka + golang",
             description: "This article presents a simple way to implement a micro-service architecture using Kafka, Golang and Docker.",
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
+            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+            slug: "kafka-golang-microservice"
         },
         {
             title: "Building scalable APIs with Node.js",
             description: "A deep dive into creating high-performance RESTful APIs using Node.js, Express, and MongoDB.",
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
+            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+            slug: "building-scalable-apis-with-node-js"
         },
         {
             title: "Advanced React Patterns",
             description: "Exploring higher-order components, render props, and custom hooks for cleaner code.",
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
+            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+            slug: "advanced-react-patterns"
         },
         {
             title: "Cloud Native Architecture",
             description: "Designing systems that are resilient, manageable, and observable in modern cloud environments.",
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
+            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+            slug: "cloud-native-architecture"
         }
     ];
 
@@ -120,8 +127,22 @@ const Hero = () => {
                                             <div className="card-actions">
                                                 {position === 'active' ? (
                                                     <>
-                                                        <button className="read-more-pill">Read more</button>
-                                                        <button className="card-arrow-small">
+                                                        <button
+                                                            className="read-more-pill"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                navigate(`/article/${article.slug}`);
+                                                            }}
+                                                        >
+                                                            Read more
+                                                        </button>
+                                                        <button
+                                                            className="card-arrow-small"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                navigate(`/article/${article.slug}`);
+                                                            }}
+                                                        >
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                                 <path d="M5 12h14M12 5l7 7-7 7" />
                                                             </svg>

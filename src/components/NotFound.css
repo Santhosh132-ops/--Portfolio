@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+.not-found-container {
+    height: 100vh;
+    width: 100vw;
+    background-color: #050505;
+    background-image:
+        linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    font-family: 'Fira Code', monospace;
+}
+
+/* Vignette */
+.not-found-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, transparent 40%, #000 100%);
+    pointer-events: none;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+/* Glitch Text */
+.glitch-wrapper {
+    margin-bottom: 2rem;
+}
+
+.glitch-text {
+    font-size: 8rem;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    letter-spacing: -5px;
+    text-shadow: 2px 2px #ff00ff, -2px -2px #00ff9d;
+    animation: glitch-skew 1s infinite linear alternate-reverse;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch-text::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+    left: -2px;
+    text-shadow: -2px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+/* Terminal Window */
+.terminal-window {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid #333;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    text-align: left;
+    backdrop-filter: blur(5px);
+}
+
+.terminal-header {
+    background: #1a1a1a;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.terminal-dot.red {
+    background: #ff5f56;
+}
+
+.terminal-dot.yellow {
+    background: #ffbd2e;
+}
+
+.terminal-dot.green {
+    background: #27c93f;
+}
+
+.terminal-title {
+    margin-left: auto;
+    margin-right: auto;
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.terminal-body {
+    padding: 1rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    min-height: 200px;
+}
+
+.log-line {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.prompt {
+    color: #ff00ff;
+    margin-right: 0.5rem;
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: #00ff9d;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #888;
+    margin-bottom: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.home-button {
+    background: transparent;
+    color: #00ff9d;
+    border: 1px solid #00ff9d;
+    padding: 0.8rem 2rem;
+    font-family: 'Fira Code', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.home-button:hover {
+    background: rgba(0, 255, 157, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+    text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+}
+
+/* Animations */
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes glitch-anim {
+    0% {
+        clip: rect(30px, 9999px, 10px, 0);
+    }
+
+    20% {
+        clip: rect(80px, 9999px, 90px, 0);
+    }
+
+    40% {
+        clip: rect(10px, 9999px, 50px, 0);
+    }
+
+    60% {
+        clip: rect(60px, 9999px, 20px, 0);
+    }
+
+    80% {
+        clip: rect(40px, 9999px, 70px, 0);
+    }
+
+    100% {
+        clip: rect(90px, 9999px, 30px, 0);
+    }
+}
+
+@keyframes glitch-anim2 {
+    0% {
+        clip: rect(60px, 9999px, 20px, 0);
+    }
+
+    20% {
+        clip: rect(10px, 9999px, 50px, 0);
+    }
+
+    40% {
+        clip: rect(90px, 9999px, 30px, 0);
+    }
+
+    60% {
+        clip: rect(30px, 9999px, 10px, 0);
+    }
+
+    80% {
+        clip: rect(70px, 9999px, 40px, 0);
+    }
+
+    100% {
+        clip: rect(50px, 9999px, 80px, 0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .glitch-text {
+        font-size: 4rem;
+    }
+
+    .terminal-window {
+        max-width: 90%;
+    }
+
+    .terminal-body {
+        font-size: 0.8rem;
+    }
+}
