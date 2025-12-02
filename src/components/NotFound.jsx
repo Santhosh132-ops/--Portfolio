@@ -7,7 +7,8 @@ const NotFound = ({
     mainText = "404",
     subtitle = "The requested resource could not be found.",
     buttonText = "RETURN HOME",
-    customLogs = null
+    customLogs = null,
+    onButtonClick = null
 }) => {
     const navigate = useNavigate();
     const [logs, setLogs] = useState([]);
@@ -38,6 +39,14 @@ const NotFound = ({
         return () => timeouts.forEach(clearTimeout);
     }, [customLogs]);
 
+    const handleButtonClick = () => {
+        if (onButtonClick) {
+            onButtonClick();
+        } else {
+            navigate('/');
+        }
+    };
+
     return (
         <div className="not-found-container">
             <div className="content-wrapper">
@@ -66,7 +75,7 @@ const NotFound = ({
 
                 <p className="subtitle">{subtitle}</p>
 
-                <button onClick={() => navigate('/')} className="home-button">
+                <button onClick={handleButtonClick} className="home-button">
                     {buttonText}
                 </button>
             </div>

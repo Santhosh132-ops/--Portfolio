@@ -5,11 +5,11 @@ import './Projects.css';
 const projects = [
     {
         id: 1,
-        title: 'Real-Time Cab Tracker',
-        description: 'A high-performance distributed system simulating real-time cab tracking using Kafka, AWS, and WebSockets. Handles thousands of concurrent location updates with sub-second latency.',
-        image: 'https://img.freepik.com/free-vector/taxi-app-concept-illustration_52683-36028.jpg', // Placeholder map/tech image
+        title: 'Geo-Fence Monitor',
+        description: 'A real-time geofencing system with auto-drive simulation and smart route planning. Features a live interactive dashboard, point-in-polygon detection, and realistic vehicle movement physics.',
+        image: 'https://cdnblog.filecloud.com/blog/wp-content/uploads/2020/11/Geofence.png', // Placeholder map/tech image
         link: '#',
-        tags: ['Kafka', 'AWS', 'Redis', 'Node.js']
+        tags: ['Node.js', 'Leaflet.js', 'TypeScript', 'Fastify']
     },
     {
         id: 2,

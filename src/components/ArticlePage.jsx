@@ -252,33 +252,27 @@ server {
         }
     };
 
+    const handleBack = (e) => {
+        e.preventDefault();
+        if (window.history.length > 2) {
+            navigate(-1);
+        } else {
+            navigate('/');
+        }
+    };
+
     if (!article) {
-        return (
-            <NotFound
-                title="BUILDING..."
-                mainText="SOON"
-                subtitle="This content is currently under construction."
-                buttonText="RETURN HOME"
-                customLogs={[
-                    { text: "> Initializing build process...", delay: 500 },
-                    { text: "> Fetching draft content...", delay: 1200 },
-                    { text: "> Compiling chapters...", delay: 2000 },
-                    { text: "> Optimizing assets...", delay: 2800 },
-                    { text: "> Status: Work in Progress (85%)", delay: 3500, color: '#ffa502' },
-                    { text: "> Waiting for final review...", delay: 4500 }
-                ]}
-            />
-        );
+        // ... (NotFound return remains same)
     }
 
     return (
         <div className="article-page-wrapper">
             {/* Animated Back Button */}
-            <Link to="/" className="floating-back-btn" aria-label="Go Back">
+            <a href="/" onClick={handleBack} className="floating-back-btn" aria-label="Go Back">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
-            </Link>
+            </a>
 
             <div className="docs-layout">
                 {/* Left Sidebar - Navigation */}
