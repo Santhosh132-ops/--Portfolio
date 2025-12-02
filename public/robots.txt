@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kunamsanthosh.dpdns.org/sitemap.xml
