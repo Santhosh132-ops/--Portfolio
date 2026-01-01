@@ -914,21 +914,23 @@ if (error.code === 'duplicate_email') {
         }
     };
 
-    // List of known article IDs (from sidebar)
+    // List of known article IDs (from sidebar and Hero carousel)
     const knownArticles = [
         'building-scalable-apis-with-node-js',
         'microservices-with-docker',
+        'microservices-docker-k8s', // From Hero carousel
         'professional-rest-api-design',
-        'advanced-react-patterns'
+        'advanced-react-patterns',
+        'cloud-native-architecture' // From Hero carousel
     ];
 
-    // If article doesn't exist at all, show 404
-    if (!article && !knownArticles.includes(id)) {
+    // If article ID is not in the known list, show 404
+    if (!knownArticles.includes(id)) {
         return <NotFound />;
     }
 
     // If article is known but content not ready, show Coming Soon
-    if (!article && knownArticles.includes(id)) {
+    if (knownArticles.includes(id) && !article) {
         return (
             <ComingSoon
                 title="Coming Soon"
