@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import NotFound from './NotFound';
+import ComingSoon from './ComingSoon';
 import './ArticlePage.css';
 
 const ArticlePage = () => {
@@ -206,7 +207,659 @@ server {
                     </section>
                 </>
             )
-        }
+        },
+        "professional-rest-api-design": {
+            title: "The Complete REST API Design Guide",
+            subtitle: "From Fundamentals to Production-Ready APIs",
+            date: "January 1, 2026",
+            readTime: "20 min read",
+            author: "Santhosh",
+            tags: ["REST", "API Design", "Tutorial", "Backend"],
+            toc: [
+                { id: "intro", title: "The Philosophy" },
+                { id: "scenario", title: "Scenario: TaskMaster" },
+                { id: "modeling", title: "Resource Modeling" },
+                { id: "methods", title: "HTTP Semantics" },
+                { id: "hateoas", title: "HATEOAS" },
+                { id: "filtering", title: "Advanced Filtering" },
+                { id: "rate-limiting", title: "Rate Limiting" },
+                { id: "idempotency", title: "Idempotency" },
+                { id: "versioning", title: "Versioning" },
+                { id: "errors", title: "Standardized Errors" }
+            ],
+            content: (
+                <>
+                    <section id="intro">
+                        <p className="lead-paragraph">
+                            Welcome to the complete REST API design guide. Whether you're building your first API or refining your tenth,
+                            this guide will teach you the principles, patterns, and practices that separate amateur APIs from professional ones.
+                        </p>
+                        <p>
+                            <strong>What you'll learn:</strong> By the end, you'll understand how to design APIs that are
+                            intuitive, scalable, maintainable, and loved by developers. We'll use a real-world project to demonstrate every concept.
+                        </p>
+                        <p>
+                            <strong>Prerequisites:</strong> Basic understanding of HTTP and JSON. Familiarity with any backend framework is helpful but not required.
+                        </p>
+                    </section>
+
+                    <section id="scenario">
+                        <h2>1. Understanding the Domain</h2>
+                        <h3>Our Case Study: "TaskMaster" Issue Tracker</h3>
+                        <p>
+                            Throughout this course, we'll design the API for <strong>TaskMaster</strong>, an issue tracking system similar to Jira or Linear.
+                            This is intentionally complex to demonstrate real-world challenges you'll face.
+                        </p>
+                        <p><strong>Why this example?</strong> Issue trackers have:</p>
+                        <ul className="scenario-list">
+                            <li><strong>Deep hierarchies:</strong> Organizations → Workspaces → Projects → Issues → Comments</li>
+                            <li><strong>Complex relationships:</strong> Issues can be assigned to users, tagged, linked to other issues</li>
+                            <li><strong>State machines:</strong> Issues move through workflows (Backlog → In Progress → Review → Done)</li>
+                            <li><strong>Permissions:</strong> Different users have different access levels</li>
+                            <li><strong>Real-time needs:</strong> Multiple users editing simultaneously</li>
+                        </ul>
+                        <p>
+                            If you can design an API for this, you can design one for anything. Let's start with the fundamentals.
+                        </p>
+                    </section>
+
+                    <section id="modeling">
+                        <h2>2. Resource Modeling</h2>
+                        <h3>Thinking in Resources, Not Database Tables</h3>
+                        <p>
+                            The biggest mistake beginners make is directly exposing their database schema as API endpoints.
+                            Instead, think in <strong>resources</strong> — logical entities that make sense to API consumers.
+                        </p>
+                        <p><strong>Example:</strong> In our database, we might have tables like:</p>
+                        <ul>
+                            <li><code>issue_table</code>, <code>issue_comments</code>, <code>issue_assignees</code></li>
+                        </ul>
+                        <p>But our API should expose clean resources:</p>
+                        <ul>
+                            <li><code>/issues</code> — Collection of all issues</li>
+                            <li><code>/issues/TM-123</code> — A specific issue</li>
+                            <li><code>/issues/TM-123/comments</code> — Comments for that issue</li>
+                        </ul>
+
+                        <h3>URI Design Principles</h3>
+                        <div className="feature-grid">
+                            <div className="feature-item">
+                                <h3>1. Use Nouns, Not Verbs</h3>
+                                <p><strong>❌ Bad:</strong> <code>/getIssues</code>, <code>/createIssue</code></p>
+                                <p><strong>✅ Good:</strong> <code>GET /issues</code>, <code>POST /issues</code></p>
+                                <p><em>Why?</em> HTTP methods ARE the verbs. The URL should describe the resource.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>2. Collections are Plural</h3>
+                                <p><strong>✅ Consistent:</strong> <code>/users/123</code>, <code>/issues/TM-45</code></p>
+                                <p><em>Why?</em> It's clearer that <code>/users</code> is a collection and <code>/users/123</code> is one item from that collection.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>3. Use Kebab-Case</h3>
+                                <p><strong>✅ Readable:</strong> <code>/user-profiles</code>, <code>/api-keys</code></p>
+                                <p><strong>❌ Avoid:</strong> <code>/userProfiles</code>, <code>/user_profiles</code></p>
+                                <p><em>Why?</em> URLs are case-insensitive in many systems. Kebab-case is the web standard.</p>
+                            </div>
+                        </div>
+
+                        <h3>Identifier Strategy</h3>
+                        <p>
+                            <strong>Don't expose auto-increment IDs.</strong> They leak information about your scale and create security issues.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// ❌ Bad - Exposes that you only have 42 issues
+GET /issues/42
+
+// ✅ Better - UUID (hard to guess)
+GET /issues/f47ac10b-58cc-4372-a567-0e02b2c3d479
+
+// ✅ Best - Human-readable public ID
+GET /issues/TM-102
+// Format: [PROJECT_CODE]-[SEQUENTIAL_NUMBER]`}
+                            </pre>
+                            <div className="code-label">identifier_examples.http</div>
+                        </div>
+                    </section>
+
+                    <section id="methods">
+                        <h2>3. HTTP Methods — The Verbs of REST</h2>
+                        <h3>Understanding What Each Method Means</h3>
+                        <p>
+                            HTTP methods aren't just conventions — they have specific semantics that enable caching, retries, and predictable behavior.
+                        </p>
+
+                        <h3>GET — Retrieve Data (Safe & Idempotent)</h3>
+                        <p>
+                            <strong>Purpose:</strong> Fetch a resource without modifying anything.<br />
+                            <strong>Idempotent:</strong> Calling it 100 times has the same effect as calling it once.<br />
+                            <strong>Cacheable:</strong> Browsers and CDNs can cache responses.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Get all issues in a project
+GET /projects/proj_abc/issues
+
+// Get a specific issue
+GET /issues/TM-123
+
+// Response: 200 OK
+{
+  "id": "TM-123",
+  "title": "Fix login bug",
+  "status": "in_progress",
+  "assignee": "user_456"
+}`}
+                            </pre>
+                        </div>
+
+                        <h3>POST — Create New Resources</h3>
+                        <p>
+                            <strong>Purpose:</strong> Create a new resource. The server decides the ID.<br />
+                            <strong>Not Idempotent:</strong> Calling it twice creates two resources (unless you use idempotency keys — we'll cover this later).
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Create a new issue
+POST /issues
+Content-Type: application/json
+
+{
+  "title": "Add dark mode",
+  "description": "Users want dark mode",
+  "projectId": "proj_abc"
+}
+
+// Response: 201 Created
+// Location header tells client where to find the new resource
+Location: /issues/TM-124
+
+{
+  "id": "TM-124",
+  "title": "Add dark mode",
+  "status": "backlog",
+  "createdAt": "2026-01-01T12:00:00Z"
+}`}
+                            </pre>
+                        </div>
+
+                        <h3>PUT vs PATCH — The Update Dilemma</h3>
+                        <p>
+                            This confuses everyone. Here's the difference:
+                        </p>
+                        <p>
+                            <strong>PUT:</strong> Replace the <em>entire</em> resource. If you omit a field, it gets deleted/reset.<br />
+                            <strong>PATCH:</strong> Update only the fields you send. Other fields remain unchanged.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Current state of TM-123:
+{
+  "title": "Fix login bug",
+  "description": "Users can't log in",
+  "status": "in_progress"
+}
+
+// PUT - Replaces everything
+PUT /issues/TM-123
+{
+  "title": "Fix login bug",
+  "status": "done"
+}
+// Result: description is now null/missing!
+
+// PATCH - Updates only what you send (BETTER)
+PATCH /issues/TM-123
+{
+  "status": "done"
+}
+// Result: title and description unchanged, only status updated`}
+                            </pre>
+                            <div className="code-label">put_vs_patch.http</div>
+                        </div>
+                        <p><strong>Rule of thumb:</strong> Use PATCH for almost all updates in modern APIs.</p>
+
+                        <h3>DELETE — Remove Resources</h3>
+                        <p>
+                            <strong>Idempotent:</strong> Deleting twice is the same as deleting once (both result in "resource not found").
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`DELETE /issues/TM-123
+
+// Response: 204 No Content (success, no body needed)
+// OR: 200 OK with a confirmation message`}
+                            </pre>
+                        </div>
+                        <p>
+                            <strong>Soft deletes:</strong> In production, you often don't actually delete data. Instead:
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// "Delete" by archiving
+PATCH /issues/TM-123
+{ "status": "archived" }
+
+// Or use a dedicated endpoint
+POST /issues/TM-123/archive`}
+                            </pre>
+                        </div>
+                    </section>
+
+                    <section id="nesting">
+                        <h2>4. Handling Hierarchy</h2>
+                        <p>
+                            In "TaskMaster", issues belong to projects. How do we reflect this?
+                        </p>
+                        <p><strong>Sub-resources</strong> are great for scoping:</p>
+                        <div className="code-block">
+                            <pre>
+                                {`GET /projects/proj_abc1/issues
+// Returns issues specifically for that project`}
+                            </pre>
+                        </div>
+                        <p>
+                            However, keep nesting shallow.
+                            <strong>Avoid:</strong> <code>/workspaces/ws_1/projects/proj_1/issues/TM-12/comments/cmt_55</code>.
+                        </p>
+                        <p>
+                            Once a resource has a unique ID (like <code>TM-12</code>), access it directly at the root:
+                            <code>/issues/TM-12/comments</code>.
+                        </p>
+                    </section>
+
+                    <section id="hateoas">
+                        <h2>4. HATEOAS — Self-Documenting APIs</h2>
+                        <h3>What is HATEOAS?</h3>
+                        <p>
+                            <strong>Hypermedia as the Engine of Application State</strong> (HATEOAS) is a constraint of REST that makes APIs self-discoverable.
+                            Instead of hardcoding URLs in your client, the server tells you what actions are available.
+                        </p>
+                        <p><strong>Real-world analogy:</strong> Think of a website. You don't memorize URLs — you click links. HATEOAS brings this to APIs.</p>
+
+                        <h3>Practical Example</h3>
+                        <div className="code-block">
+                            <pre>
+                                {`// GET /issues/TM-12
+{
+  "id": "TM-12",
+  "status": "in_progress",
+  "title": "Fix login bug",
+  "assignee": "user_456",
+  
+  // These links tell the client what they can do
+  "_links": {
+    "self": { "href": "/issues/TM-12" },
+    "comments": { "href": "/issues/TM-12/comments" },
+    "assignee": { "href": "/users/user_456" },
+    
+    // Only present because status is 'in_progress'
+    "resolve": { 
+      "href": "/issues/TM-12/transitions/resolve",
+      "method": "POST"
+    },
+    "reopen": null  // Not allowed in this state
+  }
+}`}
+                            </pre>
+                            <div className="code-label">hateoas_example.json</div>
+                        </div>
+                        <p>
+                            <strong>Benefits:</strong>
+                        </p>
+                        <ul>
+                            <li>Client doesn't need to know URL structure</li>
+                            <li>You can change URLs without breaking clients</li>
+                            <li>Permissions are built-in (no link = no permission)</li>
+                            <li>UI can be driven by available actions</li>
+                        </ul>
+                    </section>
+
+                    <section id="filtering">
+                        <h2>5. Advanced Querying</h2>
+                        <h3>The Problem with Simple Filtering</h3>
+                        <p>
+                            Simple filters like <code>?status=open</code> work for basic cases, but real applications need:
+                        </p>
+                        <ul>
+                            <li>Range queries ("issues created in the last 7 days")</li>
+                            <li>Multiple filters ("high priority AND assigned to me")</li>
+                            <li>Sorting by multiple fields</li>
+                            <li>Pagination for large datasets</li>
+                        </ul>
+
+                        <h3>Filter Operators</h3>
+                        <p>Use bracket notation to specify operators:</p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Greater than or equal
+GET /issues?priority[gte]=high
+
+// Less than (date)
+GET /issues?created_at[lt]=2026-01-01
+
+// In a set
+GET /issues?status[in]=open,in_progress
+
+// Contains (for text search)
+GET /issues?title[contains]=login`}
+                            </pre>
+                        </div>
+
+                        <h3>Sparse Fieldsets (Solving Over-fetching)</h3>
+                        <p>
+                            Mobile clients don't need all fields. Let them specify:
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Only return id, title, and status
+GET /issues?fields=id,title,status
+
+// Response is smaller and faster
+{
+  "data": [
+    { "id": "TM-12", "title": "Fix bug", "status": "open" },
+    { "id": "TM-13", "title": "Add feature", "status": "done" }
+  ]
+}`}
+                            </pre>
+                        </div>
+
+                        <h3>Sorting</h3>
+                        <div className="code-block">
+                            <pre>
+                                {`// Sort by priority (descending), then created date (ascending)
+GET /issues?sort=-priority,created_at
+
+// The minus sign (-) means descending`}
+                            </pre>
+                        </div>
+
+                        <h3>Pagination Strategies</h3>
+                        <p><strong>Offset-based (simple but has issues):</strong></p>
+                        <div className="code-block">
+                            <pre>
+                                {`GET /issues?page=2&limit=20
+
+// Problem: If items are added/deleted, you might skip or duplicate results`}
+                            </pre>
+                        </div>
+                        <p><strong>Cursor-based (better for real-time data):</strong></p>
+                        <div className="code-block">
+                            <pre>
+                                {`GET /issues?cursor=eyJpZCI6IlRNLTEyMyJ9&limit=20
+
+// Response includes next cursor
+{
+  "data": [...],
+  "pagination": {
+    "next_cursor": "eyJpZCI6IlRNLTE0MyJ9",
+    "has_more": true
+  }
+}`}
+                            </pre>
+                        </div>
+                    </section>
+
+                    <section id="rate-limiting">
+                        <h2>6. Rate Limiting</h2>
+                        <h3>Why Rate Limit?</h3>
+                        <p>
+                            Without rate limiting, a single misbehaving client (or attacker) can bring down your entire API.
+                            Rate limits protect your infrastructure and ensure fair usage.
+                        </p>
+
+                        <h3>Communicating Limits via Headers</h3>
+                        <p>Use standard headers to tell clients their usage:</p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Every successful response includes:
+HTTP/1.1 200 OK
+X-RateLimit-Limit: 1000        // Max requests per hour
+X-RateLimit-Remaining: 847     // How many left
+X-RateLimit-Reset: 1640995200  // Unix timestamp when limit resets
+
+// When limit exceeded:
+HTTP/1.1 429 Too Many Requests
+Retry-After: 3600  // Seconds until reset
+
+{
+  "error": {
+    "code": "rate_limit_exceeded",
+    "message": "You've exceeded the rate limit. Try again in 1 hour."
+  }
+}`}
+                            </pre>
+                            <div className="code-label">rate_limit_headers.http</div>
+                        </div>
+
+                        <h3>Implementation Strategies</h3>
+                        <p><strong>Fixed Window:</strong> Simple but has edge case issues</p>
+                        <div className="code-block">
+                            <pre>
+                                {`// 1000 requests per hour
+// Window: 12:00-13:00
+// User makes 1000 requests at 12:59
+// Then 1000 more at 13:01
+// = 2000 requests in 2 minutes! ⚠️`}
+                            </pre>
+                        </div>
+                        <p><strong>Sliding Window:</strong> More accurate, uses Redis</p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Pseudo-code
+const key = \`ratelimit:\${userId}\`;
+const now = Date.now();
+const windowStart = now - 3600000; // 1 hour ago
+
+// Remove old requests
+await redis.zremrangebyscore(key, 0, windowStart);
+
+// Count requests in window
+const count = await redis.zcard(key);
+
+if (count >= 1000) {
+  throw new RateLimitError();
+}
+
+// Add this request
+await redis.zadd(key, now, \`req_\${now}\`);`}
+                            </pre>
+                            <div className="code-label">sliding_window.js</div>
+                        </div>
+                    </section>
+
+                    <section id="idempotency">
+                        <h2>7. Idempotency — Handling Network Failures</h2>
+                        <h3>The Problem</h3>
+                        <p>
+                            Imagine this scenario:
+                        </p>
+                        <ol>
+                            <li>Client sends <code>POST /issues</code> to create a critical bug report</li>
+                            <li>Server processes it and creates issue TM-456</li>
+                            <li>Network times out before client receives response</li>
+                            <li>Client retries (because it doesn't know if it worked)</li>
+                            <li>Server creates <strong>duplicate</strong> issue TM-457</li>
+                        </ol>
+                        <p>This is catastrophic for payments, orders, or any non-repeatable action.</p>
+
+                        <h3>The Solution: Idempotency Keys</h3>
+                        <p>
+                            The client generates a unique key (UUID) and sends it with the request.
+                            The server caches the response for that key.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Client generates UUID once
+const idempotencyKey = "a7f3c8e9-1234-5678-9abc-def012345678";
+
+// First attempt
+POST /issues
+Idempotency-Key: a7f3c8e9-1234-5678-9abc-def012345678
+
+{
+  "title": "Critical bug",
+  "priority": "high"
+}
+
+// Response: 201 Created
+// Server stores: key -> response mapping for 24 hours
+
+// Network fails, client retries with SAME key
+POST /issues
+Idempotency-Key: a7f3c8e9-1234-5678-9abc-def012345678
+
+// Server recognizes key, returns CACHED response
+// Response: 201 Created (same as before)
+// NO duplicate created! ✅`}
+                            </pre>
+                            <div className="code-label">idempotency_example.http</div>
+                        </div>
+
+                        <h3>Implementation Notes</h3>
+                        <ul>
+                            <li>Store idempotency keys in Redis with 24-hour TTL</li>
+                            <li>Only apply to non-idempotent methods (POST, PATCH in some cases)</li>
+                            <li>GET and DELETE are naturally idempotent</li>
+                            <li>Return <code>409 Conflict</code> if key is used with different request body</li>
+                        </ul>
+                    </section>
+
+                    <section id="versioning">
+                        <h2>8. API Versioning</h2>
+                        <h3>Why Version?</h3>
+                        <p>
+                            Your API will evolve. You'll want to:
+                        </p>
+                        <ul>
+                            <li>Add new fields (usually safe)</li>
+                            <li>Remove fields (BREAKING)</li>
+                            <li>Change field types (BREAKING)</li>
+                            <li>Change behavior (potentially BREAKING)</li>
+                        </ul>
+                        <p>Without versioning, you break existing clients. With versioning, old clients keep working.</p>
+
+                        <h3>Strategy 1: URL Versioning (Recommended for Simplicity)</h3>
+                        <div className="code-block">
+                            <pre>
+                                {`// Version in URL path
+GET /v1/issues
+GET /v2/issues
+
+// Pros:
+// - Extremely visible
+// - Easy to test (just change URL)
+// - Works with all HTTP clients
+
+// Cons:
+// - URL changes (but that's the point)`}
+                            </pre>
+                        </div>
+
+                        <h3>Strategy 2: Header Versioning (Recommended for Complex APIs)</h3>
+                        <div className="code-block">
+                            <pre>
+                                {`// Version in Accept header
+GET /issues
+Accept: application/vnd.taskmaster.v2+json
+
+// Pros:
+// - URLs stay clean
+// - More "RESTful" (debatable)
+// - Can version individual resources differently
+
+// Cons:
+// - Less visible
+// - Harder to test manually`}
+                            </pre>
+                        </div>
+
+                        <h3>Best Practices</h3>
+                        <ul>
+                            <li><strong>Start with v1</strong> from day one (even if you think you won't need it)</li>
+                            <li><strong>Support old versions</strong> for at least 6-12 months</li>
+                            <li><strong>Announce deprecation</strong> early via headers: <code>Deprecation: true</code></li>
+                            <li><strong>Document changes</strong> in a changelog</li>
+                        </ul>
+                    </section>
+
+                    <section id="errors">
+                        <h2>9. Error Handling</h2>
+                        <h3>The Problem with Generic Errors</h3>
+                        <p>
+                            Don't do this:
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// ❌ Bad error response
+HTTP/1.1 500 Internal Server Error
+{
+  "error": "Something went wrong"
+}`}
+                            </pre>
+                        </div>
+                        <p>This tells the client nothing useful. They can't fix it, can't retry intelligently, can't show users a helpful message.</p>
+
+                        <h3>RFC 7807: Problem Details</h3>
+                        <p>Use the standard format:</p>
+                        <div className="code-block">
+                            <pre>
+                                {`// ✅ Good error response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/problem+json
+
+{
+  "type": "https://docs.taskmaster.com/errors/validation-error",
+  "title": "Validation Failed",
+  "status": 422,
+  "detail": "The issue cannot be created because required fields are missing.",
+  "instance": "/issues",
+  "errors": [
+    {
+      "field": "title",
+      "code": "required",
+      "message": "Title is required"
+    },
+    {
+      "field": "dueDate",
+      "code": "invalid_date",
+      "message": "Due date must be in the future"
+    }
+  ]
+}`}
+                            </pre>
+                            <div className="code-label">error_response.json</div>
+                        </div>
+
+                        <h3>Common Status Codes</h3>
+                        <ul>
+                            <li><strong>400 Bad Request:</strong> Malformed JSON, invalid syntax</li>
+                            <li><strong>401 Unauthorized:</strong> Missing or invalid authentication</li>
+                            <li><strong>403 Forbidden:</strong> Authenticated but lacks permission</li>
+                            <li><strong>404 Not Found:</strong> Resource doesn't exist</li>
+                            <li><strong>422 Unprocessable Entity:</strong> Valid format but business logic error</li>
+                            <li><strong>429 Too Many Requests:</strong> Rate limit exceeded</li>
+                            <li><strong>500 Internal Server Error:</strong> Unexpected server error (log it!)</li>
+                            <li><strong>503 Service Unavailable:</strong> Temporary outage, include Retry-After header</li>
+                        </ul>
+
+                        <h3>Error Codes for Programmatic Handling</h3>
+                        <p>Include machine-readable codes so clients can handle specific errors:</p>
+                        <div className="code-block">
+                            <pre>
+                                {`// Client can check error.code
+if (error.code === 'duplicate_email') {
+  showMessage('This email is already registered');
+} else if (error.code === 'weak_password') {
+  showPasswordStrengthMeter();
+}`}
+                            </pre>
+                        </div>
+                    </section>
+                </>
+            )
+        },
     };
 
     const article = articleContent[id];
@@ -261,8 +914,27 @@ server {
         }
     };
 
-    if (!article) {
-        // ... (NotFound return remains same)
+    // List of known article IDs (from sidebar)
+    const knownArticles = [
+        'building-scalable-apis-with-node-js',
+        'microservices-with-docker',
+        'professional-rest-api-design',
+        'advanced-react-patterns'
+    ];
+
+    // If article doesn't exist at all, show 404
+    if (!article && !knownArticles.includes(id)) {
+        return <NotFound />;
+    }
+
+    // If article is known but content not ready, show Coming Soon
+    if (!article && knownArticles.includes(id)) {
+        return (
+            <ComingSoon
+                title="Coming Soon"
+                subtitle="This article is currently being written. Check back soon for insightful content!"
+            />
+        );
     }
 
     return (
@@ -283,7 +955,7 @@ server {
                             {[
                                 { id: 'building-scalable-apis-with-node-js', title: 'Building Scalable APIs' },
                                 { id: 'microservices-with-docker', title: 'Microservices with Docker' },
-                                { id: 'kafka-golang', title: 'Kafka + Golang' },
+                                { id: 'professional-rest-api-design', title: 'Professional REST Design' },
                                 { id: 'advanced-react-patterns', title: 'Advanced React Patterns' }
                             ].map((item) => (
                                 <li key={item.id} className={id === item.id ? 'active' : ''}>
@@ -299,8 +971,18 @@ server {
 
                         <h3>Resources</h3>
                         <ul className="sidebar-nav">
-                            <li><a href="https://nodejs.org" target="_blank" rel="noreferrer">Node.js Docs ↗</a></li>
-                            <li><a href="https://redis.io" target="_blank" rel="noreferrer">Redis Docs ↗</a></li>
+                            {id === 'professional-rest-api-design' ? (
+                                <>
+                                    <li><a href="https://restfulapi.net/" target="_blank" rel="noreferrer">REST API Tutorial ↗</a></li>
+                                    <li><a href="https://tools.ietf.org/html/rfc7807" target="_blank" rel="noreferrer">RFC 7807 (Problem Details) ↗</a></li>
+                                    <li><a href="https://swagger.io/specification/" target="_blank" rel="noreferrer">OpenAPI Specification ↗</a></li>
+                                </>
+                            ) : (
+                                <>
+                                    <li><a href="https://nodejs.org" target="_blank" rel="noreferrer">Node.js Docs ↗</a></li>
+                                    <li><a href="https://redis.io" target="_blank" rel="noreferrer">Redis Docs ↗</a></li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </aside>

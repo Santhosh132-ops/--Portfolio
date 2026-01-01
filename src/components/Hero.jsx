@@ -20,10 +20,10 @@ const Hero = () => {
             slug: "microservices-docker-k8s"
         },
         {
-            title: "The simplest example is kafka + golang",
-            description: "This article presents a simple way to implement a micro-service architecture using Kafka, Golang and Docker.",
+            title: "The Complete REST API Design Guide",
+            description: "A comprehensive guide covering everything from fundamentals to production-ready APIs using a real-world Issue Tracking System.",
             image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
-            slug: "kafka-golang-microservice"
+            slug: "professional-rest-api-design"
         },
         {
             title: "Building scalable APIs with Node.js",

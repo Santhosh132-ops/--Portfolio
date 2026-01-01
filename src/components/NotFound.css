@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 .not-found-container {
     height: 100vh;
@@ -14,7 +14,25 @@
     position: relative;
     overflow: hidden;
     color: #fff;
-    font-family: 'Fira Code', monospace;
+    font-family: 'Inter', sans-serif;
+    padding: 1rem;
+}
+
+/* Lighter center area */
+.not-found-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle at center,
+            rgba(255, 255, 255, 0.06) 0%,
+            rgba(0, 255, 157, 0.04) 30%,
+            transparent 70%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Vignette */
@@ -27,6 +45,7 @@
     bottom: 0;
     background: radial-gradient(circle, transparent 40%, #000 100%);
     pointer-events: none;
+    z-index: 0;
 }
 
 .content-wrapper {
@@ -37,225 +56,122 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 800px;
-    padding: 2rem;
+    max-width: 600px;
+    padding: 2rem 1rem;
 }
 
-/* Glitch Text */
-.glitch-wrapper {
+/* Animation Wrapper */
+.animation-wrapper {
+    width: 100%;
+    max-width: 500px;
     margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.1));
 }
 
-.glitch-text {
-    font-size: 8rem;
+/* Title */
+.not-found-title {
+    font-size: clamp(2rem, 5vw, 2.5rem);
     font-weight: 700;
     color: #fff;
-    position: relative;
-    letter-spacing: -5px;
-    text-shadow: 2px 2px #ff00ff, -2px -2px #00ff9d;
-    animation: glitch-skew 1s infinite linear alternate-reverse;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
 }
 
-.glitch-text::before,
-.glitch-text::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.glitch-text::before {
-    left: 2px;
-    text-shadow: -2px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim 5s infinite linear alternate-reverse;
-}
-
-.glitch-text::after {
-    left: -2px;
-    text-shadow: -2px 0 #00fff9;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim2 5s infinite linear alternate-reverse;
-}
-
-/* Terminal Window */
-.terminal-window {
-    width: 100%;
-    max-width: 600px;
-    background: rgba(10, 10, 10, 0.9);
-    border: 1px solid #333;
-    border-radius: 6px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    margin-bottom: 2rem;
-    overflow: hidden;
-    text-align: left;
-    backdrop-filter: blur(5px);
-}
-
-.terminal-header {
-    background: #1a1a1a;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #333;
-}
-
-.terminal-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-
-.terminal-dot.red {
-    background: #ff5f56;
-}
-
-.terminal-dot.yellow {
-    background: #ffbd2e;
-}
-
-.terminal-dot.green {
-    background: #27c93f;
-}
-
-.terminal-title {
-    margin-left: auto;
-    margin-right: auto;
-    color: #666;
-    font-size: 0.8rem;
-}
-
-.terminal-body {
-    padding: 1rem;
-    font-family: 'Fira Code', monospace;
-    font-size: 0.9rem;
-    min-height: 200px;
-}
-
-.log-line {
-    margin-bottom: 0.5rem;
-    line-height: 1.4;
-}
-
-.prompt {
-    color: #ff00ff;
-    margin-right: 0.5rem;
-}
-
-.cursor {
-    display: inline-block;
-    width: 8px;
-    height: 15px;
-    background: #00ff9d;
-    animation: blink 1s infinite;
-    vertical-align: middle;
-}
-
+/* Subtitle */
 .subtitle {
-    font-size: 1.1rem;
-    color: #888;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    color: #aaa;
     margin-bottom: 2rem;
-    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    padding: 0 1rem;
 }
 
+/* Home Button */
 .home-button {
     background: transparent;
     color: #00ff9d;
-    border: 1px solid #00ff9d;
-    padding: 0.8rem 2rem;
-    font-family: 'Fira Code', monospace;
+    border: 2px solid #00ff9d;
+    padding: 0.9rem 2.5rem;
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
+    border-radius: 4px;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 
 .home-button:hover {
     background: rgba(0, 255, 157, 0.1);
-    box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
-    text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+    transform: translateY(-2px);
 }
 
-/* Animations */
-@keyframes blink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
-}
-
-@keyframes glitch-anim {
-    0% {
-        clip: rect(30px, 9999px, 10px, 0);
-    }
-
-    20% {
-        clip: rect(80px, 9999px, 90px, 0);
-    }
-
-    40% {
-        clip: rect(10px, 9999px, 50px, 0);
-    }
-
-    60% {
-        clip: rect(60px, 9999px, 20px, 0);
-    }
-
-    80% {
-        clip: rect(40px, 9999px, 70px, 0);
-    }
-
-    100% {
-        clip: rect(90px, 9999px, 30px, 0);
-    }
-}
-
-@keyframes glitch-anim2 {
-    0% {
-        clip: rect(60px, 9999px, 20px, 0);
-    }
-
-    20% {
-        clip: rect(10px, 9999px, 50px, 0);
-    }
-
-    40% {
-        clip: rect(90px, 9999px, 30px, 0);
-    }
-
-    60% {
-        clip: rect(30px, 9999px, 10px, 0);
-    }
-
-    80% {
-        clip: rect(70px, 9999px, 40px, 0);
-    }
-
-    100% {
-        clip: rect(50px, 9999px, 80px, 0);
-    }
+.home-button:active {
+    transform: translateY(0);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .glitch-text {
-        font-size: 4rem;
+    .animation-wrapper {
+        max-width: 400px;
     }
 
-    .terminal-window {
-        max-width: 90%;
+    .content-wrapper {
+        padding: 1.5rem 1rem;
     }
 
-    .terminal-body {
-        font-size: 0.8rem;
+    .subtitle {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .animation-wrapper {
+        max-width: 320px;
+    }
+
+    .home-button {
+        padding: 0.8rem 2rem;
+        letter-spacing: 0.5px;
+    }
+
+    .content-wrapper {
+        padding: 1rem 0.5rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .animation-wrapper {
+        max-width: 280px;
+    }
+
+    .home-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Landscape mobile devices */
+@media (max-height: 600px) and (orientation: landscape) {
+    .not-found-container {
+        padding: 0.5rem;
+    }
+
+    .animation-wrapper {
+        max-width: 300px;
+        margin-bottom: 1rem;
+    }
+
+    .not-found-title {
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        margin-bottom: 1rem;
     }
 }
