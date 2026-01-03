@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Lottie from 'lottie-react';
+import apiAnimation from '../assets/API.json';
+import nodejsAnimation from '../assets/Nodejs.json';
 import './Hero.css';
 import './HeroFix.css';
 
@@ -23,13 +26,17 @@ const Hero = () => {
             title: "The Complete REST API Design Guide",
             description: "A comprehensive guide covering everything from fundamentals to production-ready APIs using a real-world Issue Tracking System.",
             image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
-            slug: "professional-rest-api-design"
+            slug: "professional-rest-api-design",
+            useLottie: true,
+            lottieAnimation: 'api'
         },
         {
-            title: "Building scalable APIs with Node.js",
-            description: "A deep dive into creating high-performance RESTful APIs using Node.js, Express, and MongoDB.",
+            title: "Mastering Node.js",
+            description: "A comprehensive guide from fundamentals to production-grade applications. Learn architecture, async programming, streams, Express, and deployment.",
             image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
-            slug: "building-scalable-apis-with-node-js"
+            slug: "building-scalable-apis-with-node-js",
+            useLottie: true,
+            lottieAnimation: 'nodejs'
         },
         {
             title: "Advanced React Patterns",
@@ -118,7 +125,23 @@ const Hero = () => {
                                         }}
                                     >
                                         <div className="card-visual">
-                                            <img src={article.image} alt="Abstract 3D" />
+                                            {article.useLottie ? (
+                                                <div className="lottie-container">
+                                                    <Lottie
+                                                        animationData={
+                                                            article.lottieAnimation === 'api'
+                                                                ? apiAnimation
+                                                                : article.lottieAnimation === 'nodejs'
+                                                                    ? nodejsAnimation
+                                                                    : apiAnimation
+                                                        }
+                                                        loop={true}
+                                                        style={{ width: '100%', height: '100%' }}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <img src={article.image} alt="Abstract 3D" />
+                                            )}
                                             {position !== 'active' && <div className="card-overlay"></div>}
                                         </div>
                                         <div className="card-content">

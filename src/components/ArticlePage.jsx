@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import NotFound from './NotFound';
 import ComingSoon from './ComingSoon';
+import TerminalCode from './TerminalCode';
 import './ArticlePage.css';
 
 const ArticlePage = () => {
@@ -14,195 +15,458 @@ const ArticlePage = () => {
     // Placeholder content
     const articleContent = {
         "building-scalable-apis-with-node-js": {
-            title: "Building Scalable APIs with Node.js",
-            subtitle: "Mastering the Art of High-Performance Backend Systems",
-            date: "December 1, 2025",
-            readTime: "15 min read",
+            title: "Mastering Node.js",
+            subtitle: "From Fundamentals to Production-Grade Applications",
+            date: "January 2, 2026",
+            readTime: "25 min read",
             author: "Santhosh",
-            tags: ["Node.js", "Backend", "Scalability", "Microservices"],
+            tags: ["Node.js", "JavaScript", "Backend", "Performance"],
             toc: [
                 { id: "intro", title: "Introduction" },
-                { id: "why-node", title: "Why Node.js?" },
+                { id: "what-is-node", title: "What is Node.js?" },
+                { id: "architecture", title: "Node.js Architecture" },
                 { id: "event-loop", title: "The Event Loop" },
-                { id: "clustering", title: "Clustering" },
-                { id: "caching", title: "Caching with Redis" },
-                { id: "load-balancing", title: "Load Balancing" },
-                { id: "db-optimization", title: "DB Optimization" },
-                { id: "security", title: "Security Best Practices" },
-                { id: "monitoring", title: "Monitoring & Logging" },
-                { id: "testing", title: "Testing Strategies" },
-                { id: "conclusion", title: "Conclusion" }
+                { id: "modules", title: "Module System" },
+                { id: "async", title: "Asynchronous Programming" },
+                { id: "streams", title: "Streams & Buffers" },
+                { id: "express", title: "Building APIs with Express" },
+                { id: "database", title: "Database Integration" },
+                { id: "performance", title: "Performance Optimization" },
+                { id: "deployment", title: "Deployment" }
             ],
             content: (
                 <>
                     <section id="intro">
                         <p className="lead-paragraph">
-                            Node.js has revolutionized the way we build network applications.
-                            Its event-driven, non-blocking I/O model isn't just a feature—it's a paradigm shift
-                            that enables lightweight, efficient, and real-time applications across distributed devices.
+                            Node.js has transformed JavaScript from a browser-only language into a powerful server-side platform.
+                            Built on Chrome's V8 JavaScript engine, Node.js enables developers to use JavaScript for full-stack development,
+                            creating fast, scalable network applications with a unified language across the entire stack.
                         </p>
+                        <p>
+                            In this comprehensive guide, we'll explore Node.js from the ground up—understanding its architecture,
+                            mastering asynchronous programming, building production-ready applications, and optimizing for performance.
+                        </p>
+                        <h3>Your First Node.js Server</h3>
+                        <p>Let's start with a simple Express server:</p>
+                        <TerminalCode
+                            code={`const express = require('express')
+const app = express()
+const port = 3000
+
+// Middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.get('/api/users', (req, res) => {
+  res.json({ users: ['Alice', 'Bob', 'Charlie'] })
+})
+
+app.post('/api/users', (req, res) => {
+  const { name } = req.body
+  res.status(201).json({ message: 'User created', name })
+})
+
+// Start server
+app.listen(port, () => {
+  console.log(\`Server listen on port: \${port}\`)
+})
+
+
+Server listen on port 3000`}
+                        />
                     </section>
 
-                    <section id="why-node">
-                        <h2>Why Node.js for Scalability?</h2>
+                    <section id="what-is-node">
+                        <h2>1. What is Node.js?</h2>
                         <p>
-                            Scalability isn't just about handling more users; it's about handling them <em>efficiently</em>.
-                            Node.js excels here due to its unique architecture:
+                            Node.js is an <strong>open-source, cross-platform JavaScript runtime environment</strong> that executes JavaScript code outside a web browser.
+                            Created by Ryan Dahl in 2009, it was designed to build scalable network applications.
                         </p>
                         <div className="feature-grid">
                             <div className="feature-item">
-                                <h3>Non-blocking I/O</h3>
-                                <p>Handle thousands of concurrent connections without thread context switching overhead.</p>
+                                <h3>V8 Engine</h3>
+                                <p>Uses Google's V8 JavaScript engine, the same engine that powers Chrome, compiled to native machine code for blazing-fast execution.</p>
                             </div>
                             <div className="feature-item">
-                                <h3>Event Loop</h3>
-                                <p>A single-threaded loop that orchestrates asynchronous operations with incredible speed.</p>
+                                <h3>Event-Driven</h3>
+                                <p>Built on an event-driven architecture that makes it perfect for I/O-intensive operations like web servers and real-time applications.</p>
                             </div>
                             <div className="feature-item">
-                                <h3>Microservices Ready</h3>
-                                <p>Lightweight runtime makes it perfect for containerized, distributed architectures.</p>
+                                <h3>NPM Ecosystem</h3>
+                                <p>Access to over 2 million packages in the npm registry, the largest software registry in the world.</p>
                             </div>
                         </div>
+                        <p><strong>Perfect for:</strong></p>
+                        <ul>
+                            <li>RESTful APIs and microservices</li>
+                            <li>Real-time applications (chat, gaming, collaboration tools)</li>
+                            <li>Streaming applications</li>
+                            <li>Single-page applications (SPAs)</li>
+                            <li>Command-line tools</li>
+                        </ul>
+                    </section>
+
+                    <section id="architecture">
+                        <h2>2. Node.js Architecture</h2>
+                        <p>
+                            Understanding Node.js architecture is crucial to writing efficient applications.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`┌───────────────────────────────────────────────┐
+│           JavaScript Code (Your App)          │
+├───────────────────────────────────────────────┤
+│              Node.js Bindings (C++)           │
+├───────────────────────────────────────────────┤
+│   V8 Engine    │        libuv (Event Loop)    │
+│  (JavaScript)  │    (Async I/O, Threading)    │
+└────────────────┴──────────────────────────────┘`}
+                            </pre>
+                            <div className="code-label">architecture.txt</div>
+                        </div>
+                        <p><strong>Key Components:</strong></p>
+                        <ul>
+                            <li><strong>V8 Engine:</strong> Compiles JavaScript to machine code</li>
+                            <li><strong>libuv:</strong> Provides the event loop and async I/O</li>
+                            <li><strong>Node.js Bindings:</strong> Bridge between JavaScript and C++ libraries</li>
+                        </ul>
                     </section>
 
                     <section id="event-loop">
-                        <h2>The Event Loop: The Heart of Node.js</h2>
+                        <h2>3. The Event Loop Explained</h2>
                         <p>
-                            At its core, Node.js runs on a single thread. This sounds like a limitation, but it's actually a superpower for handling thousands of concurrent connections.
+                            The event loop is what makes Node.js non-blocking. It's a single-threaded loop that processes callbacks from the event queue.
                         </p>
                         <div className="code-block">
                             <pre>
-                                {`// Traditional Threaded Model (Pseudo-code)
-thread1 = new Thread(() => {
-  data = db.query("SELECT * FROM users"); // Blocks here!
-  print(data);
+                                {`// Synchronous (Blocking)
+const fs = require('fs');
+const data = fs.readFileSync('/file.txt'); // Blocks here!
+console.log(data);
+console.log('Done');
+
+// Asynchronous (Non-Blocking)
+fs.readFile('/file.txt', (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+console.log('Done'); // Runs immediately!`}
+                            </pre>
+                            <div className="code-label">event_loop_example.js</div>
+                        </div>
+                        <p><strong>Event Loop Phases:</strong></p>
+                        <ol>
+                            <li><strong>Timers:</strong> Executes setTimeout() and setInterval() callbacks</li>
+                            <li><strong>Pending Callbacks:</strong> Executes I/O callbacks deferred to the next loop iteration</li>
+                            <li><strong>Poll:</strong> Retrieves new I/O events; executes I/O related callbacks</li>
+                            <li><strong>Check:</strong> Executes setImmediate() callbacks</li>
+                            <li><strong>Close Callbacks:</strong> Executes close event callbacks</li>
+                        </ol>
+                    </section>
+
+                    <section id="modules">
+                        <h2>4. Module System (CommonJS & ES Modules)</h2>
+                        <p>
+                            Node.js uses modules to organize code. It supports both CommonJS (traditional) and ES Modules (modern).
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// CommonJS (require/module.exports)
+// math.js
+function add(a, b) {
+  return a + b;
+}
+module.exports = { add };
+
+// app.js
+const { add } = require('./math');
+console.log(add(2, 3)); // 5
+
+// ES Modules (import/export)
+// math.mjs
+export function add(a, b) {
+  return a + b;
+}
+
+// app.mjs
+import { add } from './math.mjs';
+console.log(add(2, 3)); // 5`}
+                            </pre>
+                            <div className="code-label">modules.js</div>
+                        </div>
+                        <p><strong>Built-in Modules:</strong></p>
+                        <ul>
+                            <li><code>fs</code> - File system operations</li>
+                            <li><code>http/https</code> - HTTP server and client</li>
+                            <li><code>path</code> - File path utilities</li>
+                            <li><code>os</code> - Operating system utilities</li>
+                            <li><code>crypto</code> - Cryptographic functions</li>
+                        </ul>
+                    </section>
+
+                    <section id="async">
+                        <h2>5. Asynchronous Programming</h2>
+                        <p>
+                            Node.js provides three ways to handle asynchronous operations: Callbacks, Promises, and Async/Await.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// 1. Callbacks (Old way - "Callback Hell")
+fs.readFile('file1.txt', (err, data1) => {
+  if (err) throw err;
+  fs.readFile('file2.txt', (err, data2) => {
+    if (err) throw err;
+    console.log(data1 + data2);
+  });
 });
 
-// Node.js Non-Blocking Model
-db.query("SELECT * FROM users", (err, data) => {
-  if (err) throw err;
-  console.log(data); // Runs only when data is ready
-});
-console.log("I run immediately!");`}
+// 2. Promises (Better)
+const readFilePromise = (file) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file, (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+};
+
+readFilePromise('file1.txt')
+  .then(data1 => readFilePromise('file2.txt'))
+  .then(data2 => console.log(data2))
+  .catch(err => console.error(err));
+
+// 3. Async/Await (Best - Modern)
+const fs = require('fs').promises;
+
+async function readFiles() {
+  try {
+    const data1 = await fs.readFile('file1.txt');
+    const data2 = await fs.readFile('file2.txt');
+    console.log(data1 + data2);
+  } catch (err) {
+    console.error(err);
+  }
+}
+readFiles();`}
                             </pre>
-                            <div className="code-label">blocking_vs_nonblocking.js</div>
+                            <div className="code-label">async_patterns.js</div>
                         </div>
                     </section>
 
-                    <section id="clustering">
-                        <h2>1. Clustering & Process Management</h2>
+                    <section id="streams">
+                        <h2>6. Streams & Buffers</h2>
                         <p>
-                            Since Node.js runs on a single thread, it limits you to one CPU core.
-                            The <code>cluster</code> module allows you to fork the main process, enabling load distribution across all available cores.
+                            Streams allow you to process data piece by piece, without loading everything into memory. Perfect for large files!
                         </p>
                         <div className="code-block">
                             <pre>
-                                {`const cluster = require('cluster');
+                                {`const fs = require('fs');
+
+// Bad: Loads entire file into memory
+fs.readFile('huge-file.txt', (err, data) => {
+  console.log(data); // Could crash with large files!
+});
+
+// Good: Processes file in chunks
+const readStream = fs.createReadStream('huge-file.txt');
+readStream.on('data', (chunk) => {
+  console.log('Received chunk:', chunk.length);
+});
+readStream.on('end', () => {
+  console.log('Finished reading file');
+});
+
+// Practical Example: File Upload
 const http = require('http');
-const numCPUs = require('os').cpus().length;
+http.createServer((req, res) => {
+  if (req.method === 'POST') {
+    req.pipe(fs.createWriteStream('upload.txt'));
+    req.on('end', () => {
+      res.end('File uploaded!');
+    });
+  }
+}).listen(3000);`}
+                            </pre>
+                            <div className="code-label">streams.js</div>
+                        </div>
+                        <p><strong>Types of Streams:</strong></p>
+                        <ul>
+                            <li><strong>Readable:</strong> Read data (e.g., fs.createReadStream)</li>
+                            <li><strong>Writable:</strong> Write data (e.g., fs.createWriteStream)</li>
+                            <li><strong>Duplex:</strong> Both readable and writable (e.g., TCP sockets)</li>
+                            <li><strong>Transform:</strong> Modify data as it's read/written (e.g., compression)</li>
+                        </ul>
+                    </section>
+
+                    <section id="express">
+                        <h2>7. Building APIs with Express</h2>
+                        <p>
+                            Express is the most popular Node.js web framework, providing a robust set of features for web and mobile applications.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`const express = require('express');
+const app = express();
+
+// Middleware
+app.use(express.json()); // Parse JSON bodies
+
+// Routes
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/users', async (req, res) => {
+  try {
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});`}
+                            </pre>
+                            <div className="code-label">express_api.js</div>
+                        </div>
+                    </section>
+
+                    <section id="database">
+                        <h2>8. Database Integration</h2>
+                        <p>
+                            Node.js works seamlessly with both SQL and NoSQL databases.
+                        </p>
+                        <div className="code-block">
+                            <pre>
+                                {`// MongoDB with Mongoose
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/myapp', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, unique: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Create
+const user = new User({ name: 'John', email: 'john@example.com' });
+await user.save();
+
+// Read
+const users = await User.find({ name: 'John' });
+
+// Update
+await User.updateOne({ _id: userId }, { name: 'Jane' });
+
+// Delete
+await User.deleteOne({ _id: userId });`}
+                            </pre>
+                            <div className="code-label">mongodb.js</div>
+                        </div>
+                    </section>
+
+                    <section id="performance">
+                        <h2>9. Performance Optimization</h2>
+                        <p>
+                            Make your Node.js applications blazing fast with these techniques:
+                        </p>
+                        <ul>
+                            <li><strong>Clustering:</strong> Use all CPU cores with the cluster module</li>
+                            <li><strong>Caching:</strong> Implement Redis for frequently accessed data</li>
+                            <li><strong>Compression:</strong> Use gzip compression for responses</li>
+                            <li><strong>Connection Pooling:</strong> Reuse database connections</li>
+                            <li><strong>Async Operations:</strong> Never block the event loop</li>
+                        </ul>
+                        <div className="code-block">
+                            <pre>
+                                {`// Clustering Example
+const cluster = require('cluster');
+const os = require('os');
 
 if (cluster.isMaster) {
+  const numCPUs = os.cpus().length;
+  console.log(\`Master process \${process.pid} is running\`);
+  
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
+  
+  cluster.on('exit', (worker) => {
+    console.log(\`Worker \${worker.process.pid} died\`);
+    cluster.fork(); // Restart worker
+  });
 } else {
-  http.createServer((req, res) => {
-    res.writeHead(200);
-    res.end('Hello World');
-  }).listen(8000);
+  require('./app'); // Your Express app
+  console.log(\`Worker \${process.pid} started\`);
 }`}
                             </pre>
-                            <div className="code-label">server.js</div>
+                            <div className="code-label">cluster.js</div>
                         </div>
                     </section>
 
-                    <section id="caching">
-                        <h2>2. Caching Strategies</h2>
+                    <section id="deployment">
+                        <h2>10. Deployment Best Practices</h2>
                         <p>
-                            The fastest request is the one you don't have to process. Implementing <strong>Redis</strong>
-                            for caching frequently accessed data can reduce database load by up to 80%.
+                            Deploy your Node.js application like a pro:
                         </p>
-                    </section>
-
-                    <section id="load-balancing">
-                        <h2>3. Load Balancing with Nginx</h2>
-                        <p>
-                            When one server isn't enough, you add more servers. But how does the user know which server to talk to?
-                            Enter the <strong>Load Balancer</strong>.
-                        </p>
+                        <ul>
+                            <li><strong>PM2:</strong> Process manager for production</li>
+                            <li><strong>Environment Variables:</strong> Use .env files for configuration</li>
+                            <li><strong>Logging:</strong> Implement structured logging with Winston or Pino</li>
+                            <li><strong>Monitoring:</strong> Use APM tools like New Relic or Datadog</li>
+                            <li><strong>Security:</strong> Keep dependencies updated, use Helmet.js</li>
+                        </ul>
                         <div className="code-block">
                             <pre>
-                                {`upstream node_app {
-    server 127.0.0.1:3000;
-    server 127.0.0.1:3001;
-    server 127.0.0.1:3002;
-}
+                                {`// PM2 Ecosystem File (ecosystem.config.js)
+module.exports = {
+  apps: [{
+    name: 'my-app',
+    script: './app.js',
+    instances: 'max', // Use all CPU cores
+    exec_mode: 'cluster',
+    env: {
+      NODE_ENV: 'production',
+      PORT: 3000
+    },
+    error_file: './logs/err.log',
+    out_file: './logs/out.log',
+    log_date_format: 'YYYY-MM-DD HH:mm:ss'
+  }]
+};
 
-server {
-    listen 80;
-    location / {
-        proxy_pass http://node_app;
-    }
-}`}
+// Start with: pm2 start ecosystem.config.js`}
                             </pre>
-                            <div className="code-label">nginx.conf</div>
+                            <div className="code-label">pm2_config.js</div>
                         </div>
-                    </section>
-
-                    <section id="db-optimization">
-                        <h2>4. Database Optimization</h2>
                         <p>
-                            Your API is often only as fast as your database. Here are quick wins:
-                        </p>
-                        <ul>
-                            <li><strong>Indexing:</strong> Ensure fields you query often (like `email` or `username`) are indexed.</li>
-                            <li><strong>Projections:</strong> Don't fetch `SELECT *`. Only fetch the fields you need.</li>
-                            <li><strong>Connection Pooling:</strong> Keep a pool of open connections ready to go.</li>
-                        </ul>
-                    </section>
-
-                    <section id="security">
-                        <h2>5. Security Best Practices</h2>
-                        <p>
-                            Security should never be an afterthought. Here are essential practices for Node.js APIs:
-                        </p>
-                        <ul>
-                            <li><strong>Rate Limiting:</strong> Use `express-rate-limit` to prevent DDoS attacks and brute-force attempts.</li>
-                            <li><strong>Helmet:</strong> Use `helmet` middleware to set secure HTTP headers.</li>
-                            <li><strong>Input Validation:</strong> Never trust user input. Use libraries like `Joi` or `Zod` to validate request data.</li>
-                            <li><strong>Sanitization:</strong> Prevent SQL Injection and XSS by sanitizing inputs.</li>
-                        </ul>
-                    </section>
-
-                    <section id="monitoring">
-                        <h2>6. Monitoring & Logging</h2>
-                        <p>
-                            You can't fix what you can't see. Implement robust monitoring:
-                        </p>
-                        <ul>
-                            <li><strong>PM2:</strong> Use PM2 for process management and basic monitoring.</li>
-                            <li><strong>APM Tools:</strong> Integrate New Relic or Datadog for deep performance insights.</li>
-                            <li><strong>Structured Logging:</strong> Use `winston` or `pino` to create logs that are easy to parse and query.</li>
-                        </ul>
-                    </section>
-
-                    <section id="testing">
-                        <h2>7. Testing Strategies</h2>
-                        <p>
-                            Reliable scaling requires reliable code.
-                        </p>
-                        <ul>
-                            <li><strong>Unit Testing:</strong> Test individual functions with Jest or Mocha.</li>
-                            <li><strong>Integration Testing:</strong> Verify that your API endpoints work correctly with the database.</li>
-                            <li><strong>Load Testing:</strong> Use tools like Artillery or k6 to simulate high traffic and find bottlenecks before your users do.</li>
-                        </ul>
-                    </section>
-
-                    <section id="conclusion">
-                        <h2>Conclusion</h2>
-                        <p>
-                            Building scalable APIs is an architectural journey. Node.js provides the high-performance foundation,
-                            but true scalability comes from thoughtful implementation of clustering, load balancing, caching, and robust security practices.
+                            <strong>Conclusion:</strong> Node.js is a powerful platform for building scalable, high-performance applications.
+                            Master these fundamentals, and you'll be well-equipped to build production-grade systems!
                         </p>
                     </section>
                 </>
