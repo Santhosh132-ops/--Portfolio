@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './Achievements.css';
 import awsCert from '../assets/aws-cert.png';
 import ociCert from '../assets/oracle-cert.jpg';
@@ -8,41 +8,30 @@ const certificationsData = [
         id: 1,
         title: "AWS Certified Cloud Practitioner",
         issuer: "Amazon Web Services",
-        icon: <img src="https://img.icons8.com/?size=100&id=wU62u24brJ44&format=png&color=000000" alt="AWS" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />,
         year: "2025",
         credentialId: "AWS05265502",
         certLink: "https://aws.amazon.com/certification/certified-cloud-practitioner/",
-        certificateImage: awsCert
+        certificateImage: awsCert,
+        color: "#06b6d4",
+        skills: ["AWS Services", "Security & Compliance", "Cloud Architecture", "Cost Optimization"],
+        certificateLink: awsCert
     },
     {
         id: 2,
         title: "OCI Certified Architect Associate",
         issuer: "Oracle Corporation",
-        icon: <img src="https://img.icons8.com/?size=100&id=39913&format=png&color=000000" alt="Oracle" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />,
         year: "2025",
-        credentialId: "-",
+        credentialId: "102741405OCI25CAA",
         certLink: "https://education.oracle.com/oracle-cloud-infrastructure-2024-architect-associate/pexam_1Z0-1072-24",
-        certificateImage: ociCert
+        certificateImage: ociCert,
+        color: "#0891b2",
+        skills: ["OCI Architecture", "Networking", "Security", "Database Services"],
+        certificateLink: ociCert
     }
 ];
 
 const Achievements = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [selectedCert, setSelectedCert] = useState(null);
-
-    const scrollToIndex = (index) => {
-        setCurrentIndex(index);
-    };
-
-    const nextCert = () => {
-        const newIndex = (currentIndex + 1) % certificationsData.length;
-        scrollToIndex(newIndex);
-    };
-
-    const prevCert = () => {
-        const newIndex = (currentIndex - 1 + certificationsData.length) % certificationsData.length;
-        scrollToIndex(newIndex);
-    };
+    const [hoveredCert, setHoveredCert] = useState(null);
 
     return (
         <section className="achievements-section" id="achievements">
@@ -50,104 +39,74 @@ const Achievements = () => {
                 {/* Header */}
                 <div className="section-header">
                     <h2 className="section-title">Certifications</h2>
+                    <div className="title-underline"></div>
                 </div>
 
-                {/* Desktop: Horizontal Scroll with Arrows */}
-                <div className="certs-carousel-wrapper">
-                    {/* Navigation Arrows */}
-                    <button className="cert-nav-btn prev" onClick={prevCert} aria-label="Previous">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M15 18l-6-6 6-6" />
-                        </svg>
-                    </button>
-
-                    {/* Scrollable Container */}
-                    <div className="plates-scroll-container">
-                        <div className="plates-grid" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                            {certificationsData.map((cert, index) => (
-                                <div
-                                    key={cert.id}
-                                    className="iron-plate-container"
-                                >
-                                    {/* Iron Plate */}
-                                    <div className="iron-plate">
-                                        {/* Company Logo */}
-                                        <div className="cert-logo">{cert.icon}</div>
-
-                                        {/* Certificate Title */}
-                                        <h3 className="cert-title">{cert.title}</h3>
-                                        <p className="cert-org">{cert.issuer}</p>
-
-                                        {/* Action Buttons */}
-                                        <div className="cert-actions">
-                                            <button
-                                                className="preview-button"
-                                                onClick={() => setSelectedCert(cert)}
-                                            >
-                                                Preview Certificate
-                                            </button>
-                                            <a
-                                                href={cert.certLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="verify-button"
-                                            >
-                                                Verify
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                                    <polyline points="15 3 21 3 21 9" />
-                                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <button className="cert-nav-btn next" onClick={nextCert} aria-label="Next">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M9 18l6-6-6-6" />
-                        </svg>
-                    </button>
-                </div>
-
-                {/* Indicator Dots */}
-                <div className="cert-indicators">
-                    {certificationsData.map((cert, index) => (
+                {/* Certifications Grid */}
+                <div className="certs-grid">
+                    {certificationsData.map((cert) => (
                         <div
                             key={cert.id}
-                            className={`cert-dot ${index === currentIndex ? 'active' : ''}`}
-                            onClick={() => scrollToIndex(index)}
-                        />
+                            className={`cert-item ${hoveredCert === cert.id ? 'hovered' : ''}`}
+                            onMouseEnter={() => setHoveredCert(cert.id)}
+                            onMouseLeave={() => setHoveredCert(null)}
+                        >
+                            {/* Left: Certificate Preview */}
+                            <div className="cert-preview">
+                                <div className="preview-overlay" style={{ background: `linear-gradient(135deg, ${cert.color}20 0%, transparent 100%)` }}></div>
+                                <img src={cert.certificateImage} alt={cert.title} />
+                                <div className="preview-badge" style={{ borderColor: cert.color, color: cert.color }}>
+                                    {cert.year}
+                                </div>
+                            </div>
+
+                            {/* Right: Info Panel */}
+                            <div className="cert-details">
+                                <div className="cert-header">
+                                    <h3 className="cert-name">{cert.title}</h3>
+                                    <p className="cert-issuer">{cert.issuer}</p>
+                                </div>
+
+                                <div className="cert-credential">
+                                    <span className="credential-label">Credential ID</span>
+                                    <span className="credential-code">{cert.credentialId}</span>
+                                </div>
+
+                                <div className="cert-skills">
+                                    <span className="skills-label">Skills Validated</span>
+                                    <div className="skills-tags">
+                                        {cert.skills.map((skill, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="skill-badge"
+                                                style={{ borderColor: cert.color }}
+                                            >
+                                                {skill}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <a
+                                    href={cert.certificateLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="cert-link-full"
+                                >
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                        <polyline points="10 9 9 9 8 9" />
+                                    </svg>
+                                    <span>View Certificate</span>
+                                </a>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
-
-            {/* Preview Modal */}
-            {selectedCert && (
-                <div className="cert-modal-overlay" onClick={() => setSelectedCert(null)}>
-                    <div className="cert-modal-content" onClick={e => e.stopPropagation()}>
-                        <button className="cert-modal-close" onClick={() => setSelectedCert(null)}>×</button>
-                        <h3 className="cert-modal-title">{selectedCert.title}</h3>
-                        <div className="cert-modal-preview">
-                            {selectedCert.certificateImage ? (
-                                <img
-                                    src={selectedCert.certificateImage}
-                                    alt={`${selectedCert.title} Certificate`}
-                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                                />
-                            ) : (
-                                <div className="cert-placeholder-image">
-                                    <span>Certificate Preview</span>
-                                    <div className="cert-watermark">{selectedCert.issuer}</div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
         </section>
     );
 };
