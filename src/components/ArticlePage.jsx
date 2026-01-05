@@ -1124,6 +1124,268 @@ if (error.code === 'duplicate_email') {
                 </>
             )
         },
+        "mongodb-unleashed": {
+            title: "MongoDB Unleashed",
+            subtitle: "The Complete Guide to Document Databases in Production",
+            date: "January 5, 2026",
+            readTime: "28 min read",
+            author: "Santhosh",
+            tags: ["MongoDB", "Database", "NoSQL", "PyMongo", "Backend"],
+            toc: [
+                { id: "intro", title: "Introduction" },
+                { id: "what-is-mongodb", title: "What is MongoDB?" },
+                { id: "architecture", title: "MongoDB Architecture" },
+                { id: "use-cases", title: "Real-World Use Cases" },
+                { id: "crud", title: "CRUD Operations" },
+                { id: "drivers", title: "MongoDB Drivers" },
+                { id: "schema-design", title: "Schema Design" },
+                { id: "indexing", title: "Indexing & Performance" },
+                { id: "aggregation", title: "Aggregation Framework" },
+                { id: "replication", title: "Replication & Sharding" },
+                { id: "deployment", title: "Deployment & Best Practices" }
+            ],
+            content: (
+                <>
+                    <section id="intro">
+                        <p className="lead-paragraph">
+                            MongoDB has revolutionized how we think about databases. As the leading NoSQL database, MongoDB provides the flexibility,
+                            scalability, and performance that modern applications demand. Unlike traditional relational databases with rigid schemas,
+                            MongoDB stores data in flexible, JSON-like documents, making it perfect for agile development and evolving data models.
+                        </p>
+                        <p>
+                            In this comprehensive guide, we'll explore MongoDB from the ground up—understanding its architecture, mastering CRUD operations,
+                            working with drivers like PyMongo, designing efficient schemas, and deploying production-ready databases.
+                        </p>
+                    </section>
+
+                    <section id="what-is-mongodb">
+                        <h2>1. What is MongoDB?</h2>
+                        <p>
+                            MongoDB is an <strong>open-source, document-oriented NoSQL database</strong> that stores data in flexible, JSON-like documents called BSON (Binary JSON).
+                            Created in 2007 by MongoDB Inc., it was designed to handle large volumes of data with high performance and horizontal scalability.
+                        </p>
+                        <div className="feature-grid">
+                            <div className="feature-item">
+                                <h3>Document-Oriented</h3>
+                                <p>Data is stored in documents (similar to JSON objects) rather than rows and tables, allowing for flexible and nested data structures.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>Schema-less</h3>
+                                <p>No predefined schema required. Documents in the same collection can have different fields, perfect for evolving data models.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>Horizontally Scalable</h3>
+                                <p>Built-in sharding distributes data across multiple servers, enabling massive scale-out capabilities.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>High Performance</h3>
+                                <p>Optimized for read and write performance with support for indexing, in-memory storage, and aggregation pipelines.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="architecture">
+                        <h2>2. MongoDB Architecture</h2>
+                        <p>Understanding MongoDB's architecture is crucial for designing efficient databases.</p>
+                        <h3>Collections & Documents</h3>
+                        <div className="code-block">
+                            <pre>{`// Example MongoDB Document
+{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 30,
+  "address": {
+    "street": "123 Main St",
+    "city": "New York"
+  },
+  "hobbies": ["reading", "gaming"]
+}`}</pre>
+                            <div className="code-label">user_document.json</div>
+                        </div>
+                    </section>
+
+                    <section id="use-cases">
+                        <h2>3. Real-World Use Cases</h2>
+                        <div className="feature-grid">
+                            <div className="feature-item">
+                                <h3>🛒 E-Commerce Catalogs</h3>
+                                <p>Products with varying attributes benefit from MongoDB's flexible schema.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>📱 Social Media</h3>
+                                <p>User profiles, posts, and comments with complex nested data.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>📊 IoT & Sensor Data</h3>
+                                <p>Time-series data from millions of sensors with high write throughput.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>📝 Content Management</h3>
+                                <p>Articles and pages with varying structures and metadata.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="crud">
+                        <h2>4. CRUD Operations</h2>
+                        <div className="code-block">
+                            <pre>{`// CREATE
+db.users.insertOne({
+  name: "Alice",
+  email: "alice@example.com"
+})
+
+// READ
+db.users.find({ age: { $gte: 30 } })
+
+// UPDATE
+db.users.updateOne(
+  { email: "alice@example.com" },
+  { $set: { age: 29 } }
+)
+
+// DELETE
+db.users.deleteOne({ email: "old@example.com" })`}</pre>
+                            <div className="code-label">crud_operations.js</div>
+                        </div>
+                    </section>
+
+                    <section id="drivers">
+                        <h2>5. MongoDB Drivers</h2>
+                        <h3>PyMongo (Python Driver)</h3>
+                        <p>PyMongo is the official Python driver for MongoDB, widely used in data science and backend applications.</p>
+                        <div className="code-block">
+                            <pre>{`# Installation
+pip install pymongo
+
+# Basic Connection
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['myapp']
+users = db['users']
+
+# CRUD with PyMongo
+# Create
+user_data = {
+    "name": "Sarah Connor",
+    "email": "sarah@example.com",
+    "skills": ["Python", "MongoDB"]
+}
+result = users.insert_one(user_data)
+print(f"Inserted ID: {result.inserted_id}")
+
+# Read
+user = users.find_one({"email": "sarah@example.com"})
+print(f"Found: {user['name']}")
+
+# Update
+users.update_one(
+    {"email": "sarah@example.com"},
+    {"$push": {"skills": "Docker"}}
+)
+
+# Delete
+users.delete_one({"email": "old@example.com"})`}</pre>
+                            <div className="code-label">pymongo_example.py</div>
+                        </div>
+                        <h3>Error Handling & Connection Pooling</h3>
+                        <div className="code-block">
+                            <pre>{`from pymongo.errors import ConnectionFailure
+
+try:
+    client = MongoClient(
+        'mongodb://localhost:27017/',
+        maxPoolSize=50,  # Connection pool
+        serverSelectionTimeoutMS=5000
+    )
+    client.admin.command('ping')
+except ConnectionFailure:
+    print("Failed to connect to MongoDB")`}</pre>
+                            <div className="code-label">pymongo_advanced.py</div>
+                        </div>
+                    </section>
+
+                    <section id="schema-design">
+                        <h2>6. Schema Design</h2>
+                        <p>The key decision: <strong>embed or reference?</strong></p>
+                        <h3>Embedding (Denormalization)</h3>
+                        <div className="code-block">
+                            <pre>{`// Blog post with embedded comments
+{
+  "title": "MongoDB Best Practices",
+  "comments": [
+    { "user": "John", "text": "Great!" },
+    { "user": "Alice", "text": "Helpful" }
+  ]
+}`}</pre>
+                            <div className="code-label">embedded.json</div>
+                        </div>
+                    </section>
+
+                    <section id="indexing">
+                        <h2>7. Indexing & Performance</h2>
+                        <div className="code-block">
+                            <pre>{`// Create indexes
+db.users.createIndex({ email: 1 })
+db.orders.createIndex({ user_id: 1, created_at: -1 })
+
+// Analyze performance
+db.users.find({ age: { $gte: 30 } }).explain("executionStats")`}</pre>
+                            <div className="code-label">indexes.js</div>
+                        </div>
+                    </section>
+
+                    <section id="aggregation">
+                        <h2>8. Aggregation Framework</h2>
+                        <div className="code-block">
+                            <pre>{`// Calculate average order value
+db.orders.aggregate([
+  { $match: { created_at: { $gte: ISODate("2026-01-01") } } },
+  { $group: {
+      _id: "$user_id",
+      avgValue: { $avg: "$total" }
+    }
+  },
+  { $sort: { avgValue: -1 } },
+  { $limit: 10 }
+])`}</pre>
+                            <div className="code-label">aggregation.js</div>
+                        </div>
+                    </section>
+
+                    <section id="replication">
+                        <h2>9. Replication & Sharding</h2>
+                        <p><strong>Replica Sets</strong> provide high availability with primary and secondary nodes.</p>
+                        <p><strong>Sharding</strong> distributes data across multiple servers for horizontal scaling.</p>
+                    </section>
+
+                    <section id="deployment">
+                        <h2>10. Deployment & Best Practices</h2>
+                        <h3>Security</h3>
+                        <ul>
+                            <li>Enable authentication</li>
+                            <li>Use TLS/SSL encryption</li>
+                            <li>Network isolation with VPCs</li>
+                            <li>Encrypt data at rest</li>
+                        </ul>
+                        <h3>Performance Tips</h3>
+                        <ul>
+                            <li>Create indexes for frequently queried fields</li>
+                            <li>Use projection to return only needed fields</li>
+                            <li>Use connection pooling in production</li>
+                            <li>Monitor with MongoDB Atlas</li>
+                        </ul>
+                        <p className="lead-paragraph">
+                            MongoDB's flexibility, scalability, and rich feature set make it an excellent choice for modern applications.
+                            Whether you're building a prototype or a global-scale application, understanding these fundamentals will
+                            help you leverage MongoDB's full potential. Happy coding! 🚀
+                        </p>
+                    </section>
+                </>
+            )
+        },
     };
 
     const article = articleContent[id];
@@ -1184,7 +1446,7 @@ if (error.code === 'duplicate_email') {
         'microservices-with-docker',
         'microservices-docker-k8s', // From Hero carousel
         'professional-rest-api-design',
-        'advanced-react-patterns',
+        'mongodb-unleashed', // MongoDB guide
         'cloud-native-architecture' // From Hero carousel
     ];
 
@@ -1222,7 +1484,7 @@ if (error.code === 'duplicate_email') {
                                 { id: 'building-scalable-apis-with-node-js', title: 'Building Scalable APIs' },
                                 { id: 'microservices-with-docker', title: 'Microservices with Docker' },
                                 { id: 'professional-rest-api-design', title: 'Professional REST Design' },
-                                { id: 'advanced-react-patterns', title: 'Advanced React Patterns' }
+                                { id: 'mongodb-unleashed', title: 'MongoDB Unleashed' }
                             ].map((item) => (
                                 <li key={item.id} className={id === item.id ? 'active' : ''}>
                                     <Link to={`/article/${item.id}`} className="sidebar-link">
@@ -1242,6 +1504,12 @@ if (error.code === 'duplicate_email') {
                                     <li><a href="https://restfulapi.net/" target="_blank" rel="noreferrer">REST API Tutorial ↗</a></li>
                                     <li><a href="https://tools.ietf.org/html/rfc7807" target="_blank" rel="noreferrer">RFC 7807 (Problem Details) ↗</a></li>
                                     <li><a href="https://swagger.io/specification/" target="_blank" rel="noreferrer">OpenAPI Specification ↗</a></li>
+                                </>
+                            ) : id === 'mongodb-unleashed' ? (
+                                <>
+                                    <li><a href="https://www.mongodb.com/docs/" target="_blank" rel="noreferrer">MongoDB Docs ↗</a></li>
+                                    <li><a href="https://pymongo.readthedocs.io/" target="_blank" rel="noreferrer">PyMongo Docs ↗</a></li>
+                                    <li><a href="https://www.mongodb.com/cloud/atlas" target="_blank" rel="noreferrer">MongoDB Atlas ↗</a></li>
                                 </>
                             ) : (
                                 <>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import apiAnimation from '../assets/API.json';
 import nodejsAnimation from '../assets/Nodejs.json';
+import mongodbImage from '../assets/mongo-db.png';
 import './Hero.css';
 import './HeroFix.css';
 
@@ -39,10 +40,10 @@ const Hero = () => {
             lottieAnimation: 'nodejs'
         },
         {
-            title: "Advanced React Patterns",
-            description: "Exploring higher-order components, render props, and custom hooks for cleaner code.",
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
-            slug: "advanced-react-patterns"
+            title: "MongoDB Unleashed",
+            description: "The complete guide to MongoDB: from document databases to production deployment. Learn CRUD, PyMongo, aggregation, indexing, and real-world use cases.",
+            image: mongodbImage,
+            slug: "mongodb-unleashed"
         },
         {
             title: "Cloud Native Architecture",
