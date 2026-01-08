@@ -1386,6 +1386,260 @@ db.orders.aggregate([
                 </>
             )
         },
+        "aws-architecture-mastery": {
+            title: "AWS Architecture Mastery",
+            subtitle: "Building Scalable Applications on Amazon Web Services",
+            date: "January 8, 2026",
+            readTime: "25 min read",
+            author: "Santhosh",
+            tags: ["AWS", "Cloud", "Architecture", "DevOps", "Infrastructure"],
+            toc: [
+                { id: "intro", title: "Introduction to AWS" },
+                { id: "infrastructure", title: "Global Infrastructure" },
+                { id: "compute", title: "Compute Services" },
+                { id: "storage", title: "Storage Services" },
+                { id: "database", title: "Database Services" },
+                { id: "networking", title: "Networking & Content Delivery" },
+                { id: "security", title: "Security & Identity" },
+                { id: "monitoring", title: "Monitoring & Management" }
+            ],
+            content: (
+                <>
+                    <section id="intro">
+                        <p className="lead-paragraph">
+                            Amazon Web Services (AWS) is the world's most comprehensive and broadly adopted cloud platform, offering over 200 fully featured services from data centers globally. From startups to enterprises, organizations of all sizes use AWS to lower costs, become more agile, and innovate faster.
+                        </p>
+                        <p>
+                            In this comprehensive guide, we'll explore AWS's core services, understand what they're used for, and see how companies like Netflix build massive-scale applications on AWS infrastructure.
+                        </p>
+                    </section>
+
+                    <section id="infrastructure">
+                        <h2>1. AWS Global Infrastructure</h2>
+                        <p>
+                            AWS operates in <strong>33 geographic regions</strong> with <strong>105 Availability Zones</strong> and over <strong>600 Points of Presence</strong> worldwide.
+                        </p>
+                        <div className="feature-grid">
+                            <div className="feature-item">
+                                <h3>Regions</h3>
+                                <p>Geographic areas containing multiple isolated Availability Zones. Choose regions based on latency, compliance, and service availability.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>Availability Zones (AZs)</h3>
+                                <p>Isolated data centers within a region with independent power, cooling, and networking. Deploy across multiple AZs for high availability.</p>
+                            </div>
+                            <div className="feature-item">
+                                <h3>Edge Locations</h3>
+                                <p>CloudFront CDN endpoints for caching content closer to users, reducing latency for global applications.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="compute">
+                        <h2>2. Compute Services</h2>
+                        <h3>Amazon EC2 (Elastic Compute Cloud)</h3>
+                        <p><strong>What it is:</strong> Virtual servers in the cloud with complete control over computing resources.</p>
+                        <p><strong>Use Cases:</strong></p>
+                        <ul>
+                            <li>Web and application servers</li>
+                            <li>Batch processing and data analysis</li>
+                            <li>Gaming servers and development environments</li>
+                            <li>Machine learning training</li>
+                        </ul>
+                        <div className="code-block">
+                            <pre>{`# Launch an EC2 instance
+aws ec2 run-instances \\
+  --image-id ami-0c55b159cbfafe1f0 \\
+  --instance-type t3.micro \\
+  --key-name MyKeyPair \\
+  --security-group-ids sg-0123456789abcdef0 \\
+  --subnet-id subnet-0123456789abcdef0`}</pre>
+                            <div className="code-label">AWS CLI</div>
+                        </div>
+
+                        <h3>AWS Lambda</h3>
+                        <p><strong>What it is:</strong> Serverless compute service that runs code in response to events without provisioning servers.</p>
+                        <p><strong>Use Cases:</strong></p>
+                        <ul>
+                            <li>Real-time file processing (image resizing, video transcoding)</li>
+                            <li>API backends with API Gateway</li>
+                            <li>Data transformation and ETL pipelines</li>
+                            <li>Scheduled tasks and cron jobs</li>
+                        </ul>
+
+                        <h3>Amazon ECS & EKS</h3>
+                        <p><strong>ECS (Elastic Container Service):</strong> Fully managed container orchestration service.</p>
+                        <p><strong>EKS (Elastic Kubernetes Service):</strong> Managed Kubernetes service for running containerized applications.</p>
+                        <p><strong>Use Cases:</strong> Microservices architecture, CI/CD pipelines, batch processing</p>
+
+                        <h3>AWS Fargate</h3>
+                        <p><strong>What it is:</strong> Serverless compute engine for containers (works with ECS and EKS).</p>
+                        <p><strong>Use Cases:</strong> Run containers without managing servers, pay only for resources used</p>
+                    </section>
+
+                    <section id="storage">
+                        <h2>3. Storage Services</h2>
+                        <h3>Amazon S3 (Simple Storage Service)</h3>
+                        <p><strong>What it is:</strong> Object storage service offering industry-leading scalability, durability (99.999999999%), and availability.</p>
+                        <p><strong>Use Cases:</strong></p>
+                        <ul>
+                            <li>Static website hosting</li>
+                            <li>Data lakes and big data analytics</li>
+                            <li>Backup and disaster recovery</li>
+                            <li>Media storage (images, videos)</li>
+                            <li>Application data and logs</li>
+                        </ul>
+                        <div className="code-block">
+                            <pre>{`# Upload file to S3
+aws s3 cp myfile.txt s3://my-bucket/
+
+# Sync directory to S3
+aws s3 sync ./local-folder s3://my-bucket/folder/
+
+# Set bucket policy for public read
+aws s3api put-bucket-policy \\
+  --bucket my-bucket \\
+  --policy file://policy.json`}</pre>
+                            <div className="code-label">S3 Operations</div>
+                        </div>
+
+                        <h3>Amazon EBS (Elastic Block Store)</h3>
+                        <p><strong>What it is:</strong> Block-level storage volumes for EC2 instances.</p>
+                        <p><strong>Use Cases:</strong> Database storage, file systems, boot volumes</p>
+
+                        <h3>Amazon EFS (Elastic File System)</h3>
+                        <p><strong>What it is:</strong> Fully managed, scalable file storage for use with EC2.</p>
+                        <p><strong>Use Cases:</strong> Shared file storage, content management, web serving</p>
+
+                        <h3>Amazon Glacier</h3>
+                        <p><strong>What it is:</strong> Low-cost archival storage with retrieval times from minutes to hours.</p>
+                        <p><strong>Use Cases:</strong> Long-term backups, compliance archives, media archives</p>
+                    </section>
+
+                    <section id="database">
+                        <h2>4. Database Services</h2>
+                        <h3>Amazon RDS (Relational Database Service)</h3>
+                        <p><strong>What it is:</strong> Managed relational database supporting MySQL, PostgreSQL, MariaDB, Oracle, SQL Server.</p>
+                        <p><strong>Use Cases:</strong></p>
+                        <ul>
+                            <li>Web and mobile applications</li>
+                            <li>E-commerce platforms</li>
+                            <li>Enterprise applications</li>
+                        </ul>
+
+                        <h3>Amazon DynamoDB</h3>
+                        <p><strong>What it is:</strong> Fully managed NoSQL database with single-digit millisecond latency at any scale.</p>
+                        <p><strong>Use Cases:</strong></p>
+                        <ul>
+                            <li>Gaming leaderboards and session management</li>
+                            <li>IoT data storage</li>
+                            <li>Mobile backends</li>
+                            <li>Real-time bidding platforms</li>
+                        </ul>
+
+                        <h3>Amazon Aurora</h3>
+                        <p><strong>What it is:</strong> MySQL and PostgreSQL-compatible database with 5x performance of standard MySQL.</p>
+                        <p><strong>Use Cases:</strong> High-performance applications requiring relational database features</p>
+
+                        <h3>Amazon ElastiCache</h3>
+                        <p><strong>What it is:</strong> In-memory caching service supporting Redis and Memcached.</p>
+                        <p><strong>Use Cases:</strong> Session management, real-time analytics, caching database queries</p>
+
+                        <h3>Amazon Redshift</h3>
+                        <p><strong>What it is:</strong> Fast, fully managed data warehouse for analytics.</p>
+                        <p><strong>Use Cases:</strong> Business intelligence, data analytics, reporting</p>
+                    </section>
+
+                    <section id="networking">
+                        <h2>5. Networking & Content Delivery</h2>
+                        <h3>Amazon VPC (Virtual Private Cloud)</h3>
+                        <p><strong>What it is:</strong> Isolated virtual network where you launch AWS resources.</p>
+                        <p><strong>Components:</strong></p>
+                        <ul>
+                            <li><strong>Subnets:</strong> Public (internet-facing) and private (internal)</li>
+                            <li><strong>Security Groups:</strong> Virtual firewalls for instances</li>
+                            <li><strong>Network ACLs:</strong> Subnet-level security</li>
+                            <li><strong>Internet Gateway:</strong> Connect VPC to internet</li>
+                            <li><strong>NAT Gateway:</strong> Allow private subnets to access internet</li>
+                        </ul>
+
+                        <h3>Amazon Route 53</h3>
+                        <p><strong>What it is:</strong> Highly available and scalable DNS service.</p>
+                        <p><strong>Use Cases:</strong> Domain registration, DNS routing, health checking, traffic management</p>
+
+                        <h3>Amazon CloudFront</h3>
+                        <p><strong>What it is:</strong> Content Delivery Network (CDN) with 600+ edge locations.</p>
+                        <p><strong>Use Cases:</strong> Video streaming, static asset delivery, API acceleration, DDoS protection</p>
+
+                        <h3>Elastic Load Balancing (ELB)</h3>
+                        <p><strong>Types:</strong></p>
+                        <ul>
+                            <li><strong>Application Load Balancer (ALB):</strong> HTTP/HTTPS traffic, path-based routing</li>
+                            <li><strong>Network Load Balancer (NLB):</strong> TCP/UDP traffic, ultra-low latency</li>
+                            <li><strong>Gateway Load Balancer:</strong> Third-party virtual appliances</li>
+                        </ul>
+
+                        <h3>Amazon API Gateway</h3>
+                        <p><strong>What it is:</strong> Fully managed service for creating, publishing, and managing APIs.</p>
+                        <p><strong>Use Cases:</strong> RESTful APIs, WebSocket APIs, serverless backends</p>
+                    </section>
+
+                    <section id="security">
+                        <h2>6. Security & Identity</h2>
+                        <h3>AWS IAM (Identity and Access Management)</h3>
+                        <p><strong>What it is:</strong> Control access to AWS services and resources securely.</p>
+                        <p><strong>Components:</strong></p>
+                        <ul>
+                            <li><strong>Users:</strong> Individual identities</li>
+                            <li><strong>Groups:</strong> Collections of users</li>
+                            <li><strong>Roles:</strong> Temporary credentials for services</li>
+                            <li><strong>Policies:</strong> JSON documents defining permissions</li>
+                        </ul>
+
+                        <h3>Amazon Cognito</h3>
+                        <p><strong>What it is:</strong> User authentication and authorization for web and mobile apps.</p>
+                        <p><strong>Use Cases:</strong> User sign-up/sign-in, social identity providers, MFA</p>
+
+                        <h3>AWS KMS (Key Management Service)</h3>
+                        <p><strong>What it is:</strong> Create and control encryption keys.</p>
+                        <p><strong>Use Cases:</strong> Encrypt data at rest, manage encryption keys, compliance</p>
+
+                        <h3>AWS WAF (Web Application Firewall)</h3>
+                        <p><strong>What it is:</strong> Protect web applications from common exploits.</p>
+                        <p><strong>Use Cases:</strong> SQL injection protection, XSS prevention, rate limiting</p>
+
+                        <h3>AWS Shield</h3>
+                        <p><strong>What it is:</strong> DDoS protection service.</p>
+                        <p><strong>Tiers:</strong> Shield Standard (free) and Shield Advanced (paid, 24/7 DDoS response team)</p>
+                    </section>
+
+                    <section id="monitoring">
+                        <h2>7. Monitoring & Management</h2>
+                        <h3>Amazon CloudWatch</h3>
+                        <p><strong>What it is:</strong> Monitoring and observability service for AWS resources and applications.</p>
+                        <p><strong>Features:</strong></p>
+                        <ul>
+                            <li>Metrics collection and visualization</li>
+                            <li>Log aggregation and analysis</li>
+                            <li>Alarms and notifications</li>
+                            <li>Dashboards for real-time monitoring</li>
+                        </ul>
+
+                        <h3>AWS CloudTrail</h3>
+                        <p><strong>What it is:</strong> Audit logging for AWS account activity.</p>
+                        <p><strong>Use Cases:</strong> Security analysis, compliance auditing, operational troubleshooting</p>
+
+                        <h3>AWS X-Ray</h3>
+                        <p><strong>What it is:</strong> Distributed tracing system for debugging and analyzing microservices.</p>
+                        <p><strong>Use Cases:</strong> Performance bottleneck identification, error analysis, service map visualization</p>
+
+                        <h3>AWS Systems Manager</h3>
+                        <p><strong>What it is:</strong> Unified interface for managing AWS resources.</p>
+                        <p><strong>Features:</strong> Patch management, configuration management, automation, parameter store</p>
+                    </section>
+                </>
+            )
+        },
     };
 
     const article = articleContent[id];
@@ -1447,7 +1701,7 @@ db.orders.aggregate([
         'microservices-docker-k8s', // From Hero carousel
         'professional-rest-api-design',
         'mongodb-unleashed', // MongoDB guide
-        'cloud-native-architecture' // From Hero carousel
+        'aws-architecture-mastery' // AWS guide
     ];
 
     // If article ID is not in the known list, show 404
@@ -1510,6 +1764,12 @@ db.orders.aggregate([
                                     <li><a href="https://www.mongodb.com/docs/" target="_blank" rel="noreferrer">MongoDB Docs ↗</a></li>
                                     <li><a href="https://pymongo.readthedocs.io/" target="_blank" rel="noreferrer">PyMongo Docs ↗</a></li>
                                     <li><a href="https://www.mongodb.com/cloud/atlas" target="_blank" rel="noreferrer">MongoDB Atlas ↗</a></li>
+                                </>
+                            ) : id === 'aws-architecture-mastery' ? (
+                                <>
+                                    <li><a href="https://docs.aws.amazon.com/" target="_blank" rel="noreferrer">AWS Documentation ↗</a></li>
+                                    <li><a href="https://aws.amazon.com/architecture/" target="_blank" rel="noreferrer">AWS Architecture Center ↗</a></li>
+                                    <li><a href="https://aws.amazon.com/getting-started/" target="_blank" rel="noreferrer">AWS Getting Started ↗</a></li>
                                 </>
                             ) : (
                                 <>

@@ -4,13 +4,17 @@ import Lottie from 'lottie-react';
 import apiAnimation from '../assets/API.json';
 import nodejsAnimation from '../assets/Nodejs.json';
 import mongodbImage from '../assets/mongo-db.png';
+import awsImage from '../assets/Aws-blog.png';
 import './Hero.css';
 import './HeroFix.css';
 
 const Hero = () => {
     const navigate = useNavigate();
     const [mounted, setMounted] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(1); // Start with the middle article
+    const [currentIndex, setCurrentIndex] = useState(() => {
+        const savedIndex = sessionStorage.getItem('heroCarouselIndex');
+        return savedIndex !== null ? parseInt(savedIndex, 10) : 1;
+    }); // Start with saved index or the middle article
 
     useEffect(() => {
         setMounted(true);
@@ -46,10 +50,11 @@ const Hero = () => {
             slug: "mongodb-unleashed"
         },
         {
-            title: "Cloud Native Architecture",
-            description: "Designing systems that are resilient, manageable, and observable in modern cloud environments.",
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
-            slug: "cloud-native-architecture"
+            title: "AWS Architecture Mastery",
+            description: "Master AWS services and architecture patterns. Learn compute, storage, databases, networking, security, and see how Netflix builds on AWS.",
+            image: awsImage,
+            imageStyle: { objectFit: 'contain', padding: '10px' },
+            slug: "aws-architecture-mastery"
         }
     ];
 
@@ -141,7 +146,11 @@ const Hero = () => {
                                                     />
                                                 </div>
                                             ) : (
-                                                <img src={article.image} alt="Abstract 3D" />
+                                                <img
+                                                    src={article.image}
+                                                    alt={article.title}
+                                                    style={article.imageStyle || {}}
+                                                />
                                             )}
                                             {position !== 'active' && <div className="card-overlay"></div>}
                                         </div>
@@ -155,6 +164,7 @@ const Hero = () => {
                                                             className="read-more-pill"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
+                                                                sessionStorage.setItem('heroCarouselIndex', currentIndex);
                                                                 navigate(`/article/${article.slug}`);
                                                             }}
                                                         >
@@ -164,6 +174,7 @@ const Hero = () => {
                                                             className="card-arrow-small"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
+                                                                sessionStorage.setItem('heroCarouselIndex', currentIndex);
                                                                 navigate(`/article/${article.slug}`);
                                                             }}
                                                         >
